@@ -1,0 +1,3 @@
+"0","ggplot(data = mpg) + # data layer, which is inherited by...."
+"0","  aes(x = displ, y = hwy, color = displ) + # aesthetic layer"
+"0","  geom_point() # geometries layer"

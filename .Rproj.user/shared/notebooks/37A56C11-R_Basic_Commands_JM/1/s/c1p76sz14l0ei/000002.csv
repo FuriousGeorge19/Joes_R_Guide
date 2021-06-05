@@ -1,0 +1,9 @@
+"0","launches %>%  "
+"0","  group_by(state_code, launch_year) %>%  # group_by both so you can count them in the next step"
+"0","  summarise(launches_total = n()) %>% # count the number of launches in each state per year "
+"0","  group_by(state_code) %>% # group_by state to set up next step"
+"0","  summarise(launches_variance = var(launches_total, na.rm = T)) %>% # calculate the var per state"
+"0","  arrange(desc(launches_variance)) %>% # arrange descending"
+"0","  head(5)"
+"2","`summarise()` has grouped output by 'state_code'. You can override using the `.groups` argument.
+"

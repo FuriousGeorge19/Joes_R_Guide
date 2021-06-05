@@ -1,0 +1,3 @@
+"0",""
+"0","# start by looking at the squirrel_subset dataset"
+"0","head(squirrel_subset,3 )"

@@ -1,0 +1,3 @@
+"0","    x[c(1, -1)]"
+"2","Error in x[c(1, -1)] : only 0's may be mixed with negative subscripts
+"

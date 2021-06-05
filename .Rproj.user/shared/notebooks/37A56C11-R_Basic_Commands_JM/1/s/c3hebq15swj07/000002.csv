@@ -1,0 +1,8 @@
+"0","squirrel_subset %>%"
+"0","  group_by(date_f, primary_fur_color) %>% # this group_by adds primary_fur_color vs. the prior one"
+"0","  summarise(count_of_squirrels = n()) %>% # so count is by fur color and date"
+"0","  ggplot() +"
+"0","  aes(x = date_f, y = count_of_squirrels, color = primary_fur_color) +"
+"0","  geom_line()"
+"2","`summarise()` has grouped output by 'date_f'. You can override using the `.groups` argument.
+"

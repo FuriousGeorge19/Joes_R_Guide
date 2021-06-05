@@ -1,0 +1,8 @@
+"0",""
+"0","set.seed(1) "
+"0",""
+"0","rows <- 101 "
+"0",""
+"0","d <- data.table(id = 1:rows) "
+"2","Error in data.table(id = 1:rows) : could not find function ""data.table""
+"

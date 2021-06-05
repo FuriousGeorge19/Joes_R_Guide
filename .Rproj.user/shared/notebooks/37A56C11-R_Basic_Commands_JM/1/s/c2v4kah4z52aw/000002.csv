@@ -1,0 +1,7 @@
+"0","squirrel_subset %>%  "
+"0","  group_by(date_f, primary_fur_color) %>%  "
+"0","  summarise(count_of_squirrels = n()) %>%"
+"0","  ggplot() +"
+"0","  aes(x = date_f, y = count_of_squirrels, color = primary_fur_color) +"
+"0","  facet_wrap(facets = vars(primary_fur_color), nrow = 1) +"
+"0","  geom_line()"

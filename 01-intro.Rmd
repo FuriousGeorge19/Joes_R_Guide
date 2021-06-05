@@ -1,0 +1,194 @@
+# Summary & Overview Functions {#intro}
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+devtools::install_github("kjhealy/nycdogs")
+library(nycdogs)
+library(ggplot2) # for mpg dataset
+
+```
+
+Basic dataframe for some of the examples below.
+
+```{r}
+d <- data.frame(     
+  id = 1:1000,     
+  x = rnorm(1000, mean = 0, sd = 1),    
+  y = rnorm(1000, mean = 10, sd = 2),     
+  color = sample(c('red', 'blue'), size = 1000, replace = TRUE)    
+) 
+```
+
+
+
+
+
+
+
+You can label chapter and section titles using `{#label}` after them, e.g., we can reference Chapter \@ref(intro). If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \@ref(methods).
+
+Figures and tables with captions will be placed in `figure` and `table` environments, respectively.
+
+```{r nice-fig, fig.cap='Here is a nice figure!', out.width='80%', fig.asp=.75, fig.align='center'}
+par(mar = c(4, 4, .1, .1))
+plot(pressure, type = 'b', pch = 19)
+```
+
+Reference a figure by its code chunk label with the `fig:` prefix, e.g., see Figure \@ref(fig:nice-fig). Similarly, you can reference tables generated from `knitr::kable()`, e.g., see Table \@ref(tab:nice-tab).
+
+```{r nice-tab, tidy=FALSE}
+knitr::kable(
+  head(iris, 20), caption = 'Here is a nice table!',
+  booktabs = TRUE
+)
+```
+
+You can write citations, too. For example, we are using the **bookdown** package [@R-bookdown] in this sample book, which was built on top of R Markdown and **knitr** [@xie2015].
+
+
+
+
+
+
+
+
+
+## [RStudio Cheatsheets (master list)](https://www.rstudio.com/resources/cheatsheets/)
+
+These seem handy.
+<br><br>
+
+
+
+Some functions that can give you a sense of the data you're working with.
+
+List of these functions:     
+- `summary`
+- `glimpse`   
+  
+- `table`
+- `dim`    
+- `nrow`    
+- `ncol`    
+- `count`  
+- `names`
+<br><br>
+ 
+## `summary`
+
+Provides a summary of each data series in a dataframe. Good for getting a sense of the range of the
+data as well as outliers and missing values. 
+
+```{r}
+summary(nyc_license)
+```
+`summary` behaves differently depending on the objects it's applied to:
+
+Above we ran summary on the dataframe `nyc_license`. Here we can create a model `mod`.
+We can run the `summary` function on each and get very different results.     
+
+
+```{r}
+mod <- lm(y ~ x, data = d)
+
+summary(d)
+summary(mod)
+```
+<br><br>
+
+
+
+
+## `print`, `glimpse` & `str`
+      
+Alternative ways to see the contents of the data in more detail than `summary()` provides.     
+
+```{r}
+print(mpg)
+```
+Note that the data type is also included.
+
+```{r}
+glimpse(mpg)
+```
+
+```{r}
+str(mpg)
+```
+
+(I think `str()` might have some powers beyond the above to unpack R objects.)
+<br><br>
+ 
+
+## `dim`, `row` and `col`
+
+Shape, rows and columns of dataframe:
+
+```{r} 
+dim(nyc_license)
+nrow(nyc_license)
+ncol(nyc_license)
+```  
+<br><br>
+
+## `count()`
+
+Useful count of unique combinations. 
+Easiest to understand with an example:
+
+```{r}
+count(mpg,manufacturer, class)
+```
+chevrolet has 5 different 2 seaters across the dataset.  Using `filter`, you can
+see these are 5 different corvettes:
+```{r}
+filter(mpg,manufacturer=="chevrolet", class=="2seater" )
+```
+<br><br>
+
+## `table()`
+
+`table()` is similar to `count()`, but provides you with the counts for all possible
+combinations, even if the value is 0. 
+
+
+```{r}
+table(mpg$manufacturer, mpg$class)
+```
+
+
+
+## `head()` and `tail()` Functions in R
+
+```{r}
+
+head(d, 5) # where d is dataframe
+
+```
+
+```{r, results="hide"}
+
+tail(d, 5)
+```
+
+Not that by including 'results="hide" in the code chunk, the code is displayed but the results are not. 
+<br><br>
+
+## `names()`
+
+`names` isn't a particularly useful overview function, but it can be useful to
+pull column headings in a vector, which can then be referenced like any other vector. 
+
+```{r}
+names(nyc_license)
+
+```
+<br><br>
+
+```{r}
+names(nyc_license)[3]
+```
+
+
+
+<br><br>

@@ -1,0 +1,8 @@
+"0","dia_2d <- ggplot(data = smaller) +"
+"0","  geom_bin2d(mapping = aes(x = carat, y = price))"
+"0",""
+"0",""
+"0","dia_hex <- ggplot(data = smaller) +"
+"0","  geom_hex(mapping = aes(x = carat, y = price))"
+"0",""
+"0","dia_2d | dia_hex"

@@ -1,0 +1,8 @@
+"0","launches %>%"
+"0","  group_by(state_code, launch_year) %>%"
+"0","  summarise(launch_count = n()) %>%"
+"0","  arrange(desc(launch_count)) %>%  "
+"0","  filter(state_code == ""US"") %>% "
+"0","  head(5)"
+"2","`summarise()` has grouped output by 'state_code'. You can override using the `.groups` argument.
+"

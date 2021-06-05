@@ -1,0 +1,2757 @@
+---
+title: "R Basic Commands - JM"
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(tidyverse)
+devtools::install_github("kjhealy/nycdogs")
+library(nycdogs)
+library(patchwork)
+install.packages('corrplot')
+install.packages('lvplot')
+install.packages("hexbin")
+library(hexbin)
+library(lvplot)
+library(corrplot)
+squirrel_subset <- read.csv('/home/jovyan/r_bridge/code/squirrels_subset.csv')
+
+agencies <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-01-15/agencies.csv')
+launches <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-01-15/launches.csv')
+```
+
+FOR THIS FILE TO WORK, SOME FILES WILL NEED TO BE INCLUDED IN THE SAME
+DIRECTORY AS THIS .Rmd
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, dpi=200)
+```
+
+```{r, include=FALSE}
+ggplot2::theme_set(ggplot2::theme_minimal())
+```
+
+
+
+#### Getting/Setting/Seeing Contents of the Working Directory
+
+Get the working directory: `getwd()`   
+
+Set the working directory: `setwd("/home/jovyan/RBridge/")`
+
+Note that by hitting backslash in rstudio, it will provide you options for the    
+next directory in the file hierarchy    
+
+
+List of files in current working directory: `list.files()`    
+<br><br>
+
+#### Changing Focus between Source and Console Panels
+
+To change focus to the source (where you write the code): `ctrl-1`  
+
+
+To change focus to the console (where you see the output): `ctrl-2`
+<br><br>
+
+
+#### What kind of object is this?
+
+```{r}
+typeof(squirrel_subset)
+class(squirrel_subset)
+```
+
+
+#### Comment/Uncomment Code:    
+
+`shift + command + C`     
+<br><br>
+  
+#### Keyboard shortcut to insert a code chunk:
+
+`Cmd + Option + I`   
+
+Gives you:
+
+    `r ''````{r}
+    
+    ```
+Also note how one can display the code for a code chunk and not the result.
+(Look in the source code to see thow.)
+<br><br>
+
+#### Getting Help
+
+You can use `?` before a command to get help on a topic. For example:
+
+`?geom_point` returns a help page for that topic.   
+<br><br>
+
+#### Installing and Loading Packages
+
+To install a package:  
+`install.packages('zoo')`
+
+To load that package and make it available:    
+`library(zoo)`
+
+The `::` specifies the package an object comes from, for example:    
+`dplyr::mutate()`
+
+<br><br>
+
+
+#### How to Create a Dataframe:    
+
+```{r}
+d <- data.frame(     
+  id = 1:1000,     
+  x = rnorm(1000, mean = 0, sd = 1),    
+  y = rnorm(1000, mean = 10, sd = 2),     
+  color = sample(c('red', 'blue'), size = 1000, replace = TRUE)    
+) 
+```
+<br><br>
+
+#### Load a CSV file into a dataframe:
+
+```{r}
+squirrel_subset <- read.csv('/home/jovyan/r_bridge/code/squirrels_subset.csv')
+```
+<br><br>
+
+
+#### ls` and `list.files()` and Clearing Your Environment
+
+`ls` gives you the list of variables in the global environment. If you want to get rid
+of them all, you would type `rm(list = ls())`. You probably could've been forgiven for
+thinking it would've been `rm(ls())`, but no dice!
+
+*(Note that `ls()` is different from `list.files()` ).*
+
+`list.files()` lists the files in the working director. `ls()` provides the variables in
+working memory. 
+<br><br>
+
+#### Clearing the console
+
+To clear the console: `Ctrl-L`.   
+<br><br>
+
+
+
+
+
+
+#### [RStudio Cheatsheets (master list)](https://www.rstudio.com/resources/cheatsheets/)
+
+These seem handy.
+<br><br>
+
+## Summary/Overview Functions
+
+List of these functions:     
+- `glimpse`   
+- `summary`    
+- `dim`    
+- `nrow`    
+- `ncol`    
+- `count`  
+- `names`
+<br><br>
+ 
+#### `glimpse`
+      
+One of the handiest functions I've encountered and that I've rarely used.     
+
+```{r}
+glimpse(nyc_license)
+```
+Note that the data type is also included.
+<br><br>
+ 
+#### `summary`
+
+Provides a summary of each data series in a dataframe.
+
+```{r}
+summary(mpg)
+```
+`summary` behaves differently depending on the objects it's applied to:
+
+Above we ran summary on the dataframe `mpg`. Here we can create a model `mod`.
+We can run the `summary` function on each and get very different results.     
+
+
+```{r}
+mod <- lm(y ~ x, data = d)
+
+summary(d)
+summary(mod)
+```
+<br><br>
+
+
+
+#### `dim`, `row` and `col`
+
+Shape, rows and columns of dataframe:
+
+```{r} 
+print(dim(nyc_license))
+print(nrow(nyc_license))
+print(ncol(nyc_license))
+```  
+<br><br>
+
+#### `count`
+
+Useful count of unique combinations. 
+Easiest to understand with an example:
+
+```{r}
+head(count(mpg,manufacturer, class),8)
+```
+chevrolet has 5 different 2 seaters across the dataset.  Using `filter`, you can
+see these are 5 different corvettes:
+```{r}
+filter(mpg,manufacturer=="chevrolet", class=="2seater" )
+```
+<br><br>
+
+#### Head and Tail Functions in R
+
+```{r}
+
+head(d, 5) # where d is dataframe
+
+```
+
+```{r, results="hide"}
+
+tail(d, 5)
+```
+
+Not that by including 'results="hide" in the code chunk, the code is displayed but the results are not. 
+<br><br>
+
+
+`names` isn't a particularly useful overview function, but it can be useful to
+pull column headings. 
+
+```{r}
+names(nyc_license)
+```
+<br><br><br><br>
+
+`I()` is the `as is` operator. It's only used or called for in some specific contexts. 
+
+One that occurs to me is with a regression. The difference between:
+
+    `lm( y ~ a + b)` versus `lm(y ~ I(a + b))`
+    
+The former treats the vectors `a` and `b` as separate regressors on `y`. The latter     
+tells R to treats the vector sum `as is` (the sum of the two vectors) and then    
+regressing `y` on that sum. 
+
+`~` The tilde in R means *distributed as*
+
+
+## Plotting
+<br>
+
+#### Basic Scatterplot
+
+Below is a very minimalist scatterplot. `aes` are the `aesthetics` for the plot,
+which in this case are simply the x and y values. They don't need to be specified as
+part of `d` because `data` is set to equal `d`.
+
+```{r, out.width="75%" }
+ggplot(data = d, aes(x=x, y=y)) + 
+  geom_point(size = 0.1)
+```
+
+Note I set the size of the *plot* using `fig.dim = c(3,2)` in the 'code chunk'.
+
+I set the size of the *points* in the scatter to be quite small setting
+the `size = 0.1` (another aesthetic) inside `geom_point`.    
+
+
+
+<br><br>     
+
+### Plot observations
+
+```{r, out.width="75%" }
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+Note that the aes for x,y is at the `geom_point` level here while it was at the
+`ggplot` level in the prior graph.
+
+Hadley Wickham (HW) points out that each `geom_` function (e.g. `geom_point`, 
+`geom_line`, etc.) takes a `mapping` argument. 
+
+This defines how variables in your dataset are mapped to visual properties. 
+
+The mapping argument is always paired with `aes()`.
+
+```{r, out.width="75%" }
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class))
+
+```
+
+Other aesthetics we could've mapped class to:   
+
+* `size`: The size of the points. Not recommended b/c mapping an unordered variable to an ordered one isn't good           practice, in this particular case.   
+
+* `alpha`: The transparency of the points.    
+
+* `shape`: Circle, triangle, square, etc. 
+
+*Note with the `shape` aesthetic:* `ggplot2` will only show 6 shapes at a time,
+dropping the rest. 
+
+*`x` and `y` are themselves aesthetics.* Can be mapped to variables to display 
+information about the data. 
+
+Something I hadn't thought of before: 
+
+*For x and y aesthetics, ggplot2 does not create a legend, but it creates an axis line with tick marks and a label. The axis line acts as a legend; it explains the mapping between locations and values.*
+
+
+
+<br><br>   
+
+### Plot example w/categorical data
+
+```{r, out.width="75%" }
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = class, y = drv))
+```
+
+This graph has a problem. The points overlap with one another. (There are 35
+compact front wheel drive cars, but they only appear as a single dot on the 
+plot.)
+
+```{r}
+count(mpg,class, drv)
+```
+
+A way of addressing this is with a different plot 'geometry' `geom_count`:
+```{r, out.width="75%" }
+ggplot(mpg, aes(x = class, y = drv)) +
+  geom_count()
+```
+<br><br>
+
+
+#### Alex preferred approach to structuring plot code
+
+```{r, out.width="75%" }
+ggplot(data = mpg) + # data layer, which is inherited by....
+  aes(x = displ, y = hwy, color = displ) + # aesthetic layer
+  geom_point() # geometries layer
+```
+
+<br><br>
+
+## Data Manipulation and Summarization    
+<br>
+
+#### Short example of manipulating and summarizing data:   
+
+```{r}
+
+# the %>% is the pipe operator in dplyr
+
+top_dog_names <- # assign this summary to variable
+  nyc_license %>%  # nyc_license is the dataset
+  group_by(animal_name) %>%  # group_by animal_name
+  summarize(total = n()) %>% # summarize. n() is the argument for count
+                             # total is a variable name this is assigned to
+                             # (It could be any variable name.)
+  arrange(desc(total)) # this arranges in descending order 
+
+head(top_dog_names, 10)
+```
+
+<br><br>
+
+#### Other `summarise` arguments:
+
+**Function in `summarise()`**
+
+
+| Objective |     Function |   Description                                           |
+|----------:|-------------:|---------------------------------------------------------|
+|     Basic |       mean() |   Average of vector x                                   |
+|           |     median() |   Median of vector x                                    |
+|           |        sum() |   Sum of vector x                                       |
+|                                                                                    |
+|variation  |         sd() |   standard deviation of vector x                        |
+|           |        IQR() |   Interquartile of vector x                             |
+|                                                                                    |
+|     Range |        min() |   Minimum of vector x                                   |
+|           |        max() |   Maximum of vector x                                   |
+|           |   quantile() |   Quantile of vector x                                  |
+|                                                                                    |
+|  Position |      first() |   Use with group_by() First observation of the group    |
+|           |       last() |   Use with group_by(). Last observation of the group    |
+|           |        nth() |   Use with group_by(). nth observation of the group     |
+|                                                                                    |
+|     Count |          n() |   Use with group_by(). Count # of rows                  |
+|           | n_distinct() |   Use with group_by(). Count # of distinct observations |
+<br><br>
+
+#### Other Split-Apply-Combine examples with `group_by` and `summarise`:
+
+Using the `launches` data, count the total number of launches per `launch_year`,   
+grouped by `state_code`
+
+```{r}
+launches %>% 
+  group_by(state_code, launch_year) %>% 
+  summarise(launch_count = n()) %>% 
+  head(10)
+```
+
+
+
+Then, using `arrange` answer the question: which year was the busiest for any state? 
+
+```{r}
+launches %>%
+  group_by(state_code, launch_year) %>%
+  summarise(launch_count = n()) %>%
+  arrange(desc(launch_count)) %>% 
+  head(5)
+```
+
+
+
+Then, using `filter` answer the question: what was the busiest year for the US? 
+
+```{r}
+launches %>%
+  group_by(state_code, launch_year) %>%
+  summarise(launch_count = n()) %>%
+  arrange(desc(launch_count)) %>%  
+  filter(state_code == "US") %>% 
+  head(5)
+```
+
+Then, using another variable summary, answer the question: which country has the   
+most variance in the per-year launches?
+
+```{r}
+launches %>%  
+  group_by(state_code, launch_year) %>%  # group_by both so you can count them in the next step
+  summarise(launches_total = n()) %>% # count the number of launches in each state per year 
+  group_by(state_code) %>% # group_by state to set up next step
+  summarise(launches_variance = var(launches_total, na.rm = T)) %>% # calculate the var per state
+  arrange(desc(launches_variance)) %>% # arrange descending
+  head(5)
+```
+
+This is quite tricky...
+
+Important to remember, each row is a launch. 
+
+#### Using `filter` and `%in%` To Find Results that Match Criteria
+
+Two different ways we can limit or filter data and get the equivalent results.
+
+
+```{r}
+filter(mpg,manufacturer=="chevrolet", class=="2seater",)
+```
+
+
+```{r}
+filter(mpg, (manufacturer=="chevrolet") & (class=="2seater"), ) 
+
+```
+<br><br>
+
+#### Step-Wise Data Manipulation Example: 
+#### `group_by`, `summarise`, `mutate`, `filter`.
+
+```{r, warning=FALSE}
+dog_name = 'Princess'
+
+where_dog_name <-
+  nyc_license %>% 
+    group_by(zip_code, animal_name) %>%  # group by these 2
+    summarise(total = n()) %>%  # count number of each animal name in each zip code, assign to variable total
+    mutate(freq = (total / sum(total)) * 100) %>%  # create a frequency column from total variable
+    filter(animal_name == dog_name) #%>%  # filter for just 'Princess'
+    #left_join(nyc_zips, .) 
+
+head(where_dog_name)
+```
+I couldn't get `left_join` to work, but thought it was interesting enough to leave in.
+(It's from the r_bridge course.) It appears the prior results can be joined to `nyc_zips`
+by just passing a `.` as an argument. 
+
+At this point, my understanding of `mutate` is that it just lets you create variables
+from other variables and them to the existing dataframe on the fly. 
+
+<br><br>
+
+#### Another Example. Combining `group_by`, `summarise` with a line plot. 
+
+
+
+
+```{r, out.width="75%"}
+
+# start by looking at the squirrel_subset dataset
+head(squirrel_subset,3 )
+
+# This next step adds a date variable to the data frame
+# Having examples of this date transformation is really useful
+
+squirrel_subset <- squirrel_subset %>%
+  mutate(date_f = as.Date.character(date, format = '%m%d%Y'))
+
+# look at the new series
+head(squirrel_subset,3 )
+
+## - Make a line plot that shows the squirrels observed by date
+
+squirrel_subset %>%
+  group_by(date_f) %>%
+  summarise(count_of_squirrels = n()) %>% # n() in summarise means count
+  ggplot() +
+  aes(x = date_f, y = count_of_squirrels) +
+  geom_line()
+```
+
+What if you wanted to make a separate line plot for each of the colors of squirrels?
+
+```{r, out.width="75%" }
+squirrel_subset %>%
+  group_by(date_f, primary_fur_color) %>% # this group_by adds primary_fur_color vs. the prior one
+  summarise(count_of_squirrels = n()) %>% # so count is by fur color and date
+  ggplot() +
+  aes(x = date_f, y = count_of_squirrels, color = primary_fur_color) +
+  geom_line()
+```
+<br>
+
+The last piece is a little tricky and a bit of a guess. But passing primary_fur_color
+worked as a way to produce three separate lines, one for each fur color
+
+
+<br><br>
+
+#### Interesting because of the use of alpha and how it is passed
+
+(it's not an aesthetic in this case)
+
+```{r, out.width="75%"}
+ggplot(data = squirrel_subset) + 
+  aes(x = long, y = lat, color = primary_fur_color, size = age) + 
+  geom_point(alpha = 0.25) + 
+  coord_quickmap()
+```
+<br><br>
+
+#### Comparison of `geom_bar` and `geom_col` and when to use each
+
+There are two ways to produce bar plots in `ggplot`. 
+
+- With `geom_bar()`) you allow `ggplot` to do the functional counting and mapping for you at the time that you<br> draw this plot. Generally for simple counts where you don't want to do pre-summarization. 
+    
+- With `geom_col()` **you** do the aggregating ahead of time and then tell the plot what height you want to map onto<br> the y-axis. More flexible but more up front summarization on your part. 
+
+- When the data is complex, or if you have a particular way that you want to do the counting, this can be easier to produce.
+    
+For me, the determination about which to use really comes down to: how easy is it to count these observations? If the <br>answer is **anything** but "very easy" then I use `geom_col()`; otherwise, I use `geom_bar()`.
+
+*Note the differences in implementation:"*
+
+- The first summarization, you explicitly create `squirrel_subset_by_color`, which is passed to 
+`plot_col`.
+
+- In `plot_bar`, on the other hand, the entire `squirrel_subset` dataframe is passed as an 
+argument and no pre-summarization is needed. That pre-summarization is handled by default by
+`geom_bar`. 
+
+- One other way to see the difference is in how `aes` is called in each. In `plot_bar`, only 
+`x = primary_fur_color` is needed because `geom_bar` will provide the count for y. In `plot_col`, 
+both x and y need to be explicitly provided as arguments. 
+ 
+
+```{r}
+squirrel_subset_by_color <- squirrel_subset %>%  
+  group_by(primary_fur_color) %>%  
+  summarise(count_by_color = n())
+```
+
+
+
+```{r, out.width="75%"}
+
+plot_col <- squirrel_subset_by_color %>%  
+  ggplot() + 
+  aes(x = primary_fur_color, y = count_by_color) + 
+  geom_col()
+
+plot_bar <- squirrel_subset %>%  
+  ggplot() + 
+  aes(x = primary_fur_color) + 
+  geom_bar()
+
+plot_col | plot_bar
+```
+<br>
+Also note how the plots are placed side-by-side with the `plot_col | plot_bar`
+call. This is enabled by the `patchwork` library, which is provided above. 
+<br><br><br>
+
+
+#### Two More Plot Types Against the Squirrel Dataset w/`geom_histogram` and `geom_density`
+
+```{r, out.width="75%"}
+
+squirrel_scatter <- squirrel_subset %>%  
+  ggplot() + 
+  aes(x = long, y = lat) + 
+  geom_point(size = 0.5)
+
+squirrel_long_histogram <- squirrel_subset %>%  
+  ggplot() + 
+  aes(x = long) + 
+  geom_histogram()
+
+squirrel_long_density <- squirrel_subset %>%  
+  ggplot() + 
+  aes(x = long) + 
+  geom_density()
+
+squirrel_scatter / squirrel_long_histogram / squirrel_long_density
+
+```
+
+- The first plot, is a scatter plot of the distribution of squirrel observations 
+around Central Park. 
+
+- The second plot reduces the data from 2 dimensions (lat-long) to 1 dimension 
+(long = east-west). It's just a histogram of the observations in different 
+longitudinal buckets. 
+
+- Last is the density function, which shows similar information to the histogram
+regarding the peak density being at -73.97 degrees. 
+<br><br>
+
+
+#### Using Facets to Create Multiple Plots, One for Each Member of a Group
+
+- `facet_wrap` allows you to create multiple plots, one for each value of a variable,
+in this case `primary_fur_color`. 
+
+- `nrow` and `ncol` allow you to arrange these in a grid with dimensions of your
+choosing
+
+```{r, out.width="75%", warning=FALSE, message=FALSE}
+squirrel_subset %>%  
+  group_by(date_f, primary_fur_color) %>%  
+  summarise(count_of_squirrels = n()) %>%
+  ggplot() +
+  aes(x = date_f, y = count_of_squirrels, color = primary_fur_color) +
+  facet_wrap(facets = vars(primary_fur_color), nrow = 1) +
+  geom_line()
+```
+
+
+<br><br>
+
+
+#### Using `stat_smooth` to Focus on the Trend
+
+Four charts that show the use of `stat_smooth`
+
+1. The upper left plot shows the original unsmoothed plot
+
+2. The upper right plot adds the smoothed line and standard error, but it's quite busy
+
+3. The lower left plot removes the raw data line and the standard error bands
+
+4. The lower right plot is identical to the lower left, but the `span` is set manually.
+
+`span` requires a little explanation. It's the percentage of the data to use to calculate
+the kernel/smoothing. The default is 75%. The larger the number, the more data is used to
+smooth. 
+<br>
+
+```{r, out.width="120%",out.height="150%", warning=FALSE, message=FALSE}
+
+squirrel_subset <- squirrel_subset %>%
+  mutate(date_f = as.Date.character(date, format = '%m%d%Y'))
+
+unsmoothed <- squirrel_subset %>%
+  group_by(date_f, primary_fur_color) %>%
+  summarise(count_of_colors = n()) %>% 
+  ggplot() + 
+  ggtitle("Unsmoothed Plot") +
+  theme(
+    plot.title = element_text(color="red", size=10, face="bold.italic")
+    ) +
+  aes(x = date_f, y = count_of_colors, color = primary_fur_color) + 
+  geom_line() 
+
+
+smoothed_plus_se <- squirrel_subset %>%
+  group_by(date_f, primary_fur_color) %>%
+  summarise(count_of_colors = n()) %>% 
+  ggplot() + 
+  ggtitle("Smoothed w/Standard Error") +
+    theme(
+    plot.title = element_text(color="blue", size=10)
+    ) +
+  aes(x = date_f, y = count_of_colors, color = primary_fur_color) + 
+  geom_line() +
+  stat_smooth()
+
+smoothed_only_no_se <- squirrel_subset %>%
+  group_by(date_f, primary_fur_color) %>%
+  summarise(count_of_colors = n()) %>% 
+  ggplot() + 
+  ggtitle("Smoothed Only, no Standard Error") +
+    theme(
+    plot.title = element_text(color="green", size=10)
+    ) +
+  aes(x = date_f, y = count_of_colors, color = primary_fur_color) + 
+  #geom_line() + # comment out the geom_line to highlight removal
+  stat_smooth(se = FALSE)
+
+smoothed_only_no_se_set_span <- squirrel_subset %>%
+  group_by(date_f, primary_fur_color) %>%
+  summarise(count_of_colors = n()) %>% 
+  ggplot() + 
+  ggtitle("Smoothed Only, `span` Set Manually") +
+    theme(
+    plot.title = element_text(color="purple", size=10)
+    ) +
+  aes(x = date_f, y = count_of_colors, color = primary_fur_color) + 
+  #geom_line() +
+  stat_smooth(se = FALSE, span=0.5)
+
+(unsmoothed | smoothed_plus_se) /
+  (smoothed_only_no_se | smoothed_only_no_se_set_span)
+
+
+```
+<br><br>
+
+#### Applying titles, labels and legends
+
+- This is a much better way of applying titles than the approach I took in the 
+prior plot. Everything in a single command. 
+
+- *One non-obvious command: To set the legend text, you set the label for `color`,
+rather than for something more intuitive, like `legend`.* 
+
+
+```{r , out.width="75%",out.height="75%", warning=FALSE, message=FALSE}
+
+squirrel_subset_by_color <- squirrel_subset %>%  
+  mutate(date_f = as.Date.character(date, format = '%m%d%Y')) %>% 
+  group_by(date_f, primary_fur_color) %>%  
+  summarise(count_of_squirrels = n())
+
+squirrel_subset %>%  
+  group_by(date_f, primary_fur_color) %>%  
+  summarise(count_of_squirrels = n()) %>%  
+  ggplot() + 
+  aes(x = date_f, y = count_of_squirrels, color = primary_fur_color) + 
+  stat_smooth(se = FALSE) + # fill out the labs() arg!
+  labs(
+    title = "Squirrel counts have declined over time",
+    subtitle = "Represented as a moving average",
+    x = "Date",
+    y = "Squirrels",
+    color = "Primary Fur Color"
+    ) +
+  theme(
+    plot.title = element_text(color="blue", size=14)
+  ) 
+
+```
+<br><br>
+
+#### Important difference in setting axis limits and fine-tuning legend placement
+
+```{r, out.width="100%",out.height="100%", warning=FALSE, message=FALSE}
+
+ss_cartesian <- squirrel_subset_by_color %>%  
+  ggplot() + 
+  aes(x = date_f, y = count_of_squirrels, color = primary_fur_color) + 
+  stat_smooth(se = FALSE) + 
+  labs(
+    title = 'Decreasing Count of Squirrels Through Time', 
+    subtitle = 'Moving average smoother estimate', 
+    x = 'Date of Observation', 
+    y = 'Count of Squirrels', 
+    color = 'Primary Fur Color'
+  ) + 
+  theme(
+    plot.title = element_text(color="red", size=10, face="bold.italic"),
+    legend.position = c(.4, .5),
+    legend.justification = c("right", "top"),
+    legend.box.just = "left",
+    legend.margin = margin(6, 6, 6, 6), 
+    legend.title = element_text(color = "blue", size = 10),
+    legend.text = element_text(color = "black", size = 8)
+    ) +
+  coord_cartesian(
+    xlim = c(as.Date.character('2018-10-08'),
+             as.Date.character('2018-10-15')))
+
+
+ss_lims <- squirrel_subset_by_color %>%  
+  ggplot() + 
+  aes(x = date_f, y = count_of_squirrels, color = primary_fur_color) + 
+  stat_smooth(se = FALSE) + 
+  labs(
+    title = 'Decreasing Count of Squirrels Through Time', 
+    subtitle = 'Moving average smoother estimate', 
+    x = 'Date of Observation', 
+    y = 'Count of Squirrels', 
+    color = 'Primary Fur Color'
+  ) + 
+    theme(
+    plot.title = element_text(color="red", size=10, face="bold.italic"),
+    legend.position = c(.4, .5),
+    legend.justification = c("right", "top"),
+    legend.box.just = "left",
+    legend.margin = margin(6, 6, 6, 6), 
+    legend.title = element_text(color = "blue", size = 10),
+    legend.text = element_text(color = "black", size = 8)
+    ) +
+  lims(
+    x = c(as.Date.character('2018-10-08'),
+             as.Date.character('2018-10-15'))
+    )
+
+ss_cartesian | ss_lims
+
+```
+
+- The most important takeaway is the difference in how `coord_cartesian` and `lims`
+limit the range of information displayed on axes.
+
+- The difference is made apparent in the chart above.
+
+- `coord_cartesian` merely limits the displayed information. If the displayed
+information requires using data outside the range set, that data is available.
+
+- `lims` sets the data outside the range set to NA, which results in the moving 
+average looking odd, because it's based on a different amount of data at the 
+edges of the graph. 
+<br><br>
+
+#### Use of themes in plots. Essentially a way to apply mulitple setting to plots all at once.
+
+
+```{r , out.width="100%",out.height="100%", warning=FALSE, message=FALSE}
+
+ss_theme_linedraw <- squirrel_subset %>%  
+  group_by(date_f, primary_fur_color) %>%  
+  summarise(count_of_squirrels = n()) %>%  
+  ggplot() + 
+  aes(x = date_f, y = count_of_squirrels, color = primary_fur_color) + 
+  stat_smooth(se = FALSE) + 
+  labs(
+    title = 'There are a lot of grey squirrels',
+    subtitle = "`theme_linedraw`",
+    x = 'Date of observation', 
+    y = 'Count of squirrels', 
+    color = 'Primary Fur Color') +
+  #theme_minimal() 
+  #theme_gray()
+  theme_linedraw()
+  #theme_dark()
+ 
+
+ss_theme_dark <- squirrel_subset %>%  
+  group_by(date_f, primary_fur_color) %>%  
+  summarise(count_of_squirrels = n()) %>%  
+  ggplot() + 
+  aes(x = date_f, y = count_of_squirrels, color = primary_fur_color) + 
+  stat_smooth(se = FALSE) + 
+  labs(
+    title = 'There are a lot of grey squirrels',
+    subtitle = "`theme_dark`",
+    x = 'Date of observation', 
+    y = 'Count of squirrels', 
+    color = 'Primary Fur Color') + 
+  #theme_minimal() 
+  #theme_gray()
+  #theme_linedraw()
+  theme_dark()
+
+ss_theme_linedraw | ss_theme_dark
+
+```
+To examine the distribution of a categorical variable, use a bar chart:
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut))
+
+```
+
+
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+diamonds %>% 
+  count(cut)
+```
+To examine the distribution of a continuous variable, use a histogram:
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = carat), binwidth = 0.5)
+```
+
+You can compute this by hand by combining `dplyr::count()` and `ggplot2::cut_width()`:
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+diamonds %>% 
+  count(cut_width(carat, 0.5))
+```
+#### Here is how the graph above looks when we zoom into just the diamonds with a size
+of less than three carats and choose a smaller binwidth.
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+smaller <- diamonds %>% 
+  filter(carat < 3)
+  
+ggplot(data = smaller, mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.1)
+```
+
+If you wish to overlay multiple histograms in the same plot, I recommend using 
+`geom_freqpoly()` instead of `geom_histogram()`. `geom_freqpoly()` performs the 
+same calculation as `geom_histogram()`, but instead of displaying the counts with
+bars, uses lines instead. It’s much easier to understand overlapping lines than 
+bars.
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+ggplot(data = smaller, mapping = aes(x = carat, colour = cut)) +
+  geom_freqpoly(binwidth = 0.1)
+```
+As an example, the histogram below suggests several interesting questions:
+
+- Why are there more diamonds at whole carats and common fractions of carats?
+
+- Why are there more diamonds slightly to the right of each peak than there are slightly to the left of each peak?
+
+- Why are there no diamonds bigger than 3 carats?
+
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+ggplot(data = smaller, mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.01)
+```
+The histogram below shows the length (in minutes) of 272 eruptions of the Old Faithful 
+Geyser in Yellowstone National Park. Eruption times appear to be clustered into two
+groups: there are short eruptions (of around 2 minutes) and long eruptions (4-5 minutes), 
+but little in between.
+
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+ggplot(data = faithful, mapping = aes(x = eruptions)) + 
+  geom_histogram(binwidth = 0.25)
+```
+(Seeing `aes(x = y)` below seems a little odd. A quick look at the `diamonds` dataset is helpful.)
+```{r}
+?diamonds
+```
+
+
+When you have a lot of data, outliers are sometimes difficult to see in a histogram.
+For example, take the distribution of the y variable from the diamonds dataset. The 
+only evidence of outliers is the unusually wide limits on the x-axis.
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+ggplot(diamonds) + 
+  geom_histogram(mapping = aes(x = y), binwidth = 0.5)
+```
+There are so many observations in the common bins that the rare bins are so short 
+that you can’t see them (although maybe if you stare intently at 0 you’ll spot 
+something). To make it easy to see the unusual values, we need to zoom to small
+values of the *y-axis* with `coord_cartesian()`:
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+ggplot(diamonds) + 
+  geom_histogram(mapping = aes(x = y), binwidth = 0.5) +
+  coord_cartesian(ylim = c(0, 20))
+```
+
+This allows us to see that there are three unusual values: 0, ~30, and ~60. We 
+pluck them out with `dplyr` (THIS IS A GOOD EXAMPLE OF A USE OF `filter`, `select`,
+and `arrange`):
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+unusual <- diamonds %>% 
+  filter(y < 3 | y > 20) %>% 
+  select(price, x, y, z) %>%
+  arrange(y)
+unusual
+
+```
+
+Also note you can `arrange` descending by y like so: `arrange(desc(y))`
+
+The y variable measures one of the three dimensions of these diamonds, in mm. We
+know that diamonds can’t have a width of 0mm, so these values must be incorrect.
+
+
+1. Explore the distribution of each of the x, y, and z variables in diamonds. What 
+do you learn? Think about a diamond and how you might decide which dimension is the
+length, width, and depth.
+
+#### Distribution of `x`
+
+(Note that `coord_cartesian` is both lining up the x axes but also cutting off
+parts of the distribution with a small number of observations.)
+
+```{r , out.width="50%",out.height="50%", warning=FALSE, message=FALSE}
+
+summary(select(diamonds, x, y , z))
+
+
+x_dist <- diamonds %>% 
+  ggplot() + 
+  aes(x = x) +
+  geom_histogram(binwidth = .01) +
+  coord_cartesian(xlim = c(0,10))
+
+y_dist <- diamonds %>% 
+  ggplot() + 
+  aes(x = y) +
+  geom_histogram(binwidth = .01) +
+  coord_cartesian(xlim = c(0,10))
+
+z_dist <- diamonds %>% 
+  ggplot() + 
+  aes(x = z) +
+  geom_histogram(binwidth = .01) +
+  coord_cartesian(xlim = c(0,10))
+
+x_dist / y_dist / z_dist
+
+```
+The graph above is helpful in comparing the distributions to one another, but 
+misses out on a more detailed look at the outliers above 10mm. 
+
+
+- One would think 0 values are errors     
+- x's and y's are generally larger than z's    
+- The distributions are multimodal    
+
+In the solutions guide, this was an excellent example of the use of `filter` and
+`scale_x_continuous`.
+
+```{r}
+filter(diamonds, x > 0, x < 10) %>%
+  ggplot() +
+  geom_histogram(mapping = aes(x = x), binwidth = 0.01) +
+  scale_x_continuous(breaks = 1:10)
+```
+
+
+2. Explore the distribution of `price`. Do you discover anything unusual or 
+surprising? (Hint: Carefully think about the binwidth and make sure you try a
+wide range of values.)
+
+```{r}
+
+d_price_all_dist <- diamonds %>% 
+  ggplot() + 
+  aes(x = price) +
+  geom_histogram(binwidth=100) +
+  labs(title = "Distribution of all diamond prices")
+
+d_price_lt2500_dist <- diamonds %>% 
+  ggplot() + 
+  aes(x = price) +
+  geom_histogram(binwidth=100) + 
+  labs(title = "Distribution of diamond prices < $2500") +
+  coord_cartesian(xlim=c(0,2500))
+
+d_price_all_dist / d_price_lt2500_dist
+
+
+```
+
+Mean Diamond Price: `r mean(diamonds$price)`    
+
+Median Diamond Price: `r median(diamonds$price)`
+
+A few takeaways:  
+
+- The distribution has a very long tail, out to ~$19k, with a large right skew.  
+
+- The most frequent prices are clustered around $700. One could imagine that these
+diamonds might be for mass market retailers.    
+
+- The median price is: \$2,401 while the mean is \$3,933. Both of these seem
+consistent w/the skew we see above.    
+
+3. How many diamonds are 0.99 carat? How many are 1 carat? What do you think is 
+the cause of the difference?
+
+#### Good example to work on counting
+
+```{r}
+
+sum(with(diamonds, carat == 1))
+
+nrow(diamonds[diamonds$carat == 0.99, ])
+
+sum(diamonds$carat == 0.99)
+
+nrow(filter(diamonds, carat == 0.99))
+nrow(filter(diamonds, carat == 1.0))
+```
+Why the difference? 
+
+The market for diamonds might favor round number purchases and therefore there
+may be a strong incentive to cut raw diamonds into those sizes. 
+
+4. Compare and contrast `coord_cartesian()` vs `xlim()` or `ylim()` when zooming 
+in on a histogram. What happens if you leave binwidth unset? What happens if you
+try and zoom so only half a bar shows?
+
+
+```{r, message=FALSE}
+d_price_all_dist <- diamonds %>% 
+  ggplot() + 
+  aes(x = price) +
+  geom_histogram() +
+  labs(title = "Distribution of all diamond prices",
+       subtitle = "`coords_cartesian`") + 
+  coord_cartesian(xlim = c(0,1000))
+
+d_price_all_dist2 <- diamonds %>% 
+  ggplot() + 
+  aes(x = price) +
+  geom_histogram() +
+  labs(title = "Distribution of all diamond prices",
+       subtitle = "`xlim`") + 
+  xlim(0,1000)
+
+
+d_price_all_dist / d_price_all_dist2
+
+```
+
+Why the differences? 
+
+The bins in the `coords_cartesian` are calculated before the limits are applied, 
+resulting in bigger buckets for the default `binwidth`. With `xlim`, the data
+outside the boundary is thrown away and *then* the bins are calculated. 
+
+### Missing Values
+
+##### How to drop rows (not recommended to do to a dataset, but a good example of
+how to perform this concisely).
+
+This filters diamond's rows to only include rows with y values between 3 and 20. 
+
+```{r}
+diamonds2 <- diamonds %>% 
+  filter(between(y, 3, 20))
+```
+
+##### Replacing missing vlaues 
+
+He recommends replacing missing values with NAs The example below is our first
+example of vector-wise conditional logic using `ifelse()`
+
+```{r}
+diamonds2 <- diamonds %>% 
+  mutate(y = ifelse(y < 3 | y > 20, NA, y))
+```
+
+To look at entire dataset to see changes, you'd type the following:
+
+`view(diamonds2)`
+
+This spawns a new window w/all the data in it. 
+
+`case_when()` is particularly useful inside mutate when you want to create a new
+variable that relies on a complex combination of existing variables.
+
+Good example of the use of `mutate()`. I hadn't realized you can simultaneously
+mutate multiple variables. 
+
+```{r}
+nycflight_temp <- nycflights13::flights %>% 
+  mutate(
+    cancelled = is.na(dep_time),
+    sched_hour = sched_dep_time %/% 100,
+    sched_min = sched_dep_time %% 100,
+    sched_dep_time = sched_hour + sched_min / 60
+  ) 
+head(nycflight_temp,5)
+
+```
+
+
+7.4.1 Exercises
+1. What happens to missing values in a histogram? What happens to missing values in 
+a bar chart? Why is there a difference?
+
+
+
+```{r}
+diamonds2 <- diamonds %>%
+  mutate(y = ifelse(y < 3 | y > 20, NA, y))
+
+
+at1 <- 
+  ggplot(diamonds2, aes(x = y)) +
+  geom_histogram()
+
+at2 <- diamonds %>%
+  mutate(cut = if_else(runif(n()) < 0.1, NA_character_, as.character(cut))) %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = cut))
+  
+at1 / at2
+```
+
+- `geom_histogram` (upper plot) drops NAs from each bin    
+- `geom_bar` treats NAs as just another category
+
+
+2. What does `na.rm = TRUE` do in `mean()` and `sum()`?
+
+```{r}
+mean_with = mean(nycflight_temp$air_time)
+mean_without = mean(nycflight_temp$air_time, na.rm = TRUE)
+mean_with
+mean_without
+
+sum_with = sum(nycflight_temp$air_time)
+sum_without = sum(nycflight_temp$air_time, na.rm = TRUE)
+sum_with
+sum_without
+
+```
+
+It removes NAs, allowing them to be calculated. 
+
+### Covariation
+
+Explore how the price of a diamond varies with its quality. Try multiple plot
+types and see which work best. 
+
+```{r}
+ggplot(data = diamonds, mapping = aes(x = price)) + 
+  geom_freqpoly(mapping = aes(colour = cut), binwidth = 500)
+```
+It’s hard to see the difference in distribution because the overall counts differ
+so much.
+
+To make the comparison easier we need to swap what is displayed on the y-axis. 
+Instead of displaying count, we’ll display density, which is the count standardised 
+so that the area under each frequency polygon is one.
+
+```{r}
+ggplot(data = diamonds, mapping = aes(x = price, y = ..density..)) + 
+  geom_freqpoly(mapping = aes(colour = cut), binwidth = 500)
+```
+
+Another alternative to display the distribution of a continuous variable broken down   
+by a categorical variable is the boxplot. A boxplot is a type of visual shorthand for   
+a distribution of values that is popular among statisticians. Each boxplot consists of:    
+
+- A box that stretches from the 25th percentile of the distribution to the 75th  
+percentile, a distance known as the interquartile range (IQR). In the middle of the box  
+is a line that displays the median, i.e. 50th percentile, of the distribution.   
+
+These three lines give you a sense of the spread of the distribution and whether or not   
+the distribution is symmetric about the median or skewed to one side.     
+
+- Visual points that display observations that fall more than 1.5 times the IQR from   
+either edge of the box. These outlying points are unusual so are plotted individually.   
+
+- A line (or whisker) that extends from each end of the box and goes to the farthest   
+non-outlier point in the distribution.
+
+![Alt text](/home/jovyan/RBridge/eda-boxplot.png)
+
+Let’s take a look at the distribution of price by cut using `geom_boxplot()`
+
+
+```{r}
+ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+  geom_boxplot()
+```
+
+This supports the counterintuitive finding that better quality diamonds are cheaper    
+on average! In the exercises, you’ll be challenged to figure out why. (My guess is   
+diamond size, as measure in carats, explains this.)
+
+
+Many categorical variables don’t have such an intrinsic order, so you might want to     
+reorder them to make a more informative display. One way to do that is with the    
+reorder() function.   
+
+
+For example, take the class variable in the mpg dataset. You might be interested to    
+know how highway mileage varies across classes:    
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = class, y = hwy)) +
+  geom_boxplot()
+```
+
+#### *This is almost definitely something I'd struggle to figure out on my own*
+
+To make the trend easier to see, we can reorder class based on the median value of 
+hwy:
+
+```{r}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy))
+```
+
+If you have long variable names, geom_boxplot() will work better if you flip it 90°.     
+You can do that with `coord_flip()`.
+
+
+```{r}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy)) +
+  coord_flip()
+```
+
+*7.5.1.1 Exercises*
+
+1. Use what you’ve learned to improve the visualisation of the departure times of   
+cancelled vs. non-cancelled flights.
+
+```{r}
+
+nycflights13::flights %>% 
+  mutate(
+    cancelled = is.na(dep_time),
+    sched_hour = sched_dep_time %/% 100,
+    sched_min = sched_dep_time %% 100,
+    sched_dep_time = sched_hour + sched_min / 60
+  ) %>% 
+  ggplot() +
+  geom_boxplot(mapping = aes(x = cancelled, y = sched_dep_time)) +
+  coord_flip()
+
+
+```
+
+2. What variable in the diamonds dataset is most important for predicting the price    
+of a diamond? How is that variable correlated with cut? Why does the combination of   those two relationships lead to lower quality diamonds being more expensive?      
+
+#### *This illustrates two different ways of binning continuous variables*     
+
+The first involves creating a new binned variable in the dataset using `cut_width`
+
+```{r}
+diamonds2 <- diamonds %>% 
+  mutate(carat_bin=cut_width(carat, width=0.5, boundary=0) ) 
+
+ggplot(data = diamonds2, mapping = aes(x = carat_bin, y = price)) +
+  geom_boxplot()
+```
+
+The approach in the book creates a `group` using `cut_width` right in the dataset
+
+```{r}
+ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
+  geom_boxplot(mapping = aes(group = cut_width(carat, 0.1)), orientation = "x")
+```
+
+It certainly appears that `carat` explains a lot of variation.   
+
+How is that variable correlated with cut?     
+
+```{r}
+ggplot(data = diamonds2, mapping = aes(x = cut, y = carat)) +
+  geom_boxplot()
+```
+There's a weak negative relationship between cut and carat size. Larger diamonds
+can be sold at a high price with a lower quality cut.    
+
+
+4. One problem with boxplots is that they were developed in an era of much smaller   
+datasets and tend to display a prohibitively large number of “outlying values”. One   
+approach to remedy this problem is the letter value plot. Install the `lvplot`     
+package, and try using `geom_lv()` to display the distribution of `price` vs `cut`.     
+What do you learn? How do you interpret the plots?    
+
+```{r}
+ggplot(data = diamonds2, mapping = aes(x = cut, y = price)) +
+  geom_lv()
+```
+#### *[Excellent medium article on the value of these plots. To read when I have more time](https://towardsdatascience.com/letter-value-plot-the-easy-to-understand-boxplot-for-large-datasets-12d6c1279c97)*
+
+
+### Two categorical variables
+
+One way to do that is to rely on the built-in `geom_count()`:    
+```{r}
+ggplot(data = diamonds) +
+  geom_count(mapping = aes(x = cut, y = color))
+```
+
+Another approach is to compute the count with `dplyr`:
+```{r}
+head(diamonds %>% 
+  count(color, cut), 10)
+```
+Then visualise with `geom_tile()` and the fill aesthetic:    
+```{r}
+diamonds %>% 
+  count(color, cut) %>%  
+  ggplot(mapping = aes(x = color, y = cut)) +
+    geom_tile(mapping = aes(fill = n))
+```
+
+#### *7.5.2.1 Exercises*
+
+1. How could you rescale the count dataset above to more clearly show the     
+distribution of cut within colour, or colour within cut?
+
+#### *Very good example involving plotting what are ultimately proportions that I    
+would've been challenged to replicate, although it's quite logical when you step     
+through it      
+
+```{r}
+diamonds %>%
+  count(color, cut) %>% # count of these two variables in the dataset
+  group_by(color) %>% # group by color
+  mutate(prop = n / sum(n)) %>% # for each color, count proportion each cut represents 
+  ggplot(mapping = aes(x = color, y = cut)) +
+  geom_tile(mapping = aes(fill = prop))
+```
+
+One thing I don't totally understand is how the `n` in this statement works    
+`prop = n / sum(n)`
+
+### Two continuous variables    
+
+Comparing scatterplots, one using `alpha` to minimize the impact of overlap.   
+
+```{r}
+
+dia_scat_1 <- ggplot(data = diamonds) +
+  geom_point(mapping = aes(x = carat, y = price))
+
+
+dia_scat_2 <- ggplot(data = diamonds) + 
+  geom_point(mapping = aes(x = carat, y = price), alpha = 1 / 100)
+
+dia_scat_1 | dia_scat_2
+
+```
+Two other approaches involve `geom_bin2d()` and `geom_hex()`     
+
+```{r, out.height="200%"}
+dia_2d <- ggplot(data = smaller) +
+  geom_bin2d(mapping = aes(x = carat, y = price))
+
+
+dia_hex <- ggplot(data = smaller) +
+  geom_hex(mapping = aes(x = carat, y = price))
+
+dia_2d | dia_hex
+```
+
+## End, R4DS EDA materials
+
+
+```{r load launch data, message=FALSE}
+agencies <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-01-15/agencies.csv')
+launches <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-01-15/launches.csv')
+```
+
+#### Good example of using `filter`s
+
+Find launches in the 1980s by either France or the Soviet Union
+
+Solution w/two different approaches (look at 3rd line of code in each)
+
+```{r}
+launch_1a <- launches %>% 
+ filter(between(launch_year, 1980, 1989)) %>% 
+ filter(state_code == "F" | state_code == "SU") %>%
+ arrange(launch_year)
+
+launch_1b <- launches %>% 
+ filter(between(launch_year, 1980, 1989)) %>% 
+ filter(state_code %in% c("F", "SU")) %>%
+ arrange(launch_year)
+
+head(launch_1a, 10)
+```
+
+#### How to get count of unique values for each variable in a dataframe
+
+```{r}
+table(select(launches, state_code))
+```
+
+
+#### Use of `arrange`; a little bit new b/c I hadn't sorted by multiple options before
+
+```{r}
+launches %>% 
+  arrange(launch_year, desc(state_code)) %>% 
+  head()
+```
+
+#### A few implementations of `select()`
+
+Alex analogizes `select` as the column-wise partner to `filter()` for rows
+
+```{r}
+launches %>% 
+  select(mission, agency, state_code) %>% 
+  head(3)
+```
+
+
+```{r}
+launches %>% 
+  select(!contains("launch")) %>% 
+  head(3) 
+```
+#### Example using `mutate()` and `select()`
+
+```{r}
+agencies %>% 
+  mutate(log_count = log(count)) %>% 
+  select(agency | contains("count")) %>% 
+  arrange(desc(count)) %>% 
+  head()
+```
+
+#### Different examples of `summarise()`
+
+```{r}
+agencies %>% 
+  summarise(
+    avg_launches = mean(count),
+    med_launches = median(count),
+    var_launches = var(count),
+    unq_agencies = n_distinct(agencies)
+  )
+```
+
+### Vectors
+
+[R for Data Science: Vectors](https://r4ds.had.co.nz/vectors.html)
+
+## Vector basics
+
+There are two types of vectors:
+
+1.  **Atomic** vectors, of which there are six types: **logical**, **integer**, **double**, **character**, **complex**, and **raw**.
+    Integer and double vectors are collectively known as **numeric** vectors.
+
+2.  **Lists**, which are sometimes called recursive vectors because lists can contain other lists.
+
+The chief difference between atomic vectors and lists is that atomic vectors are homogeneous, while lists can be heterogeneous. There’s one other related object: NULL. NULL is often used to represent the absence of a vector (as opposed to NA which is used to represent the absence of a value in a vector). NULL typically behaves like a vector of length 0. Figure 20.1 summarises the interrelationships.
+
+![20.1](/home/jovyan/RBridge/vector_hierarchy.png)
+
+Every vector has two key properties:
+
+1.  Its **type**, which you can determine with `typeof()`.
+
+    ```{r}
+    typeof(letters)
+    typeof(1:10)
+    ```
+
+2.  Its **length**, which you can determine with `length()`.
+
+    ```{r}
+    x <- list("a", "b", 1:10)
+    length(x)
+    ```
+
+This chapter will introduce you to these important vectors from simplest to most complicated. You’ll start with atomic vectors, then build up to lists, and finish off with augmented vectors.
+
+## Important types of atomic vector
+
+The four most important types of atomic vector are logical, integer, double, and character.
+
+## Logical
+
+Logical vectors are the simplest type of atomic vector because they can take only three possible values: `FALSE`, `TRUE`, and `NA`.    
+Logical vectors are usually constructed with comparison operators, you can also create them by hand with `c()`:
+
+```{r}
+1:10 %% 3 == 0
+c(TRUE, TRUE, FALSE, NA)
+```
+
+### Numeric
+
+Integer and double vectors are known collectively as numeric vectors.
+In R, numbers are doubles by default.
+To make an integer, place an `L` after the number:
+
+```{r}
+typeof(1)
+typeof(1L)
+1.5L
+```
+
+The distinction between integers and doubles is not usually important, but there are two important differences that you should be aware of:
+
+1.  Doubles are approximations.
+
+    For example, what is square of the square root of two?
+
+    ```{r}
+    x <- sqrt(2) ^ 2
+    x
+    x - 2
+    ```
+
+    This behaviour is common when working with floating point numbers: most calculations include some approximation error.
+    Instead of comparing floating point numbers using `==`, you should use `dplyr::near()` which allows for some numerical tolerance.
+
+2.  Integers have one special value: `NA`, while doubles have four: `NA`, `NaN`, `Inf` and `-Inf`.
+    All three special values `NaN`, `Inf` and `-Inf` can arise during division:
+
+    ```{r}
+    c(-1, 0, 1) / 0
+    ```
+
+    Avoid using `==` to check for these other special values.
+    Instead use the helper functions `is.finite()`, `is.infinite()`, and `is.nan()`:
+
+    |                 | 0   | Inf | NA  | NaN |
+    |-----------------|-----|-----|-----|-----|
+    | `is.finite()`   | x   |     |     |     |
+    | `is.infinite()` |     | x   |     |     |
+    | `is.na()`       |     |     | x   | x   |
+    | `is.nan()`      |     |     |     | x   |
+
+### Character
+
+Character vectors are the most complex type of atomic vector, because each element of a character vector is a string, and a string can contain an arbitrary amount of data.
+
+`parse_number` function. (One of several parse functions.) Could be quite handy.
+
+```{r}
+parse_number(c("1.0", "3.5", "$1,000.00", "NA", "ABCD12234.90", "1234ABC", "A123B", "A1B2C"))
+```
+
+You've already seen the most important type of implicit coercion: using a logical vector in a numeric context.
+In this case `TRUE` is converted to `1` and `FALSE` converted to `0`.
+That means the sum of a logical vector is the number of trues, and the mean of a logical vector is the proportion of trues:
+
+(Also one of the first times I've seen `sample()` in this document.)
+
+```{r}
+x <- sample(20, 100, replace = TRUE) # sample integers from 1-20, 100 times w/replacement
+y <- x > 10 # create a logical vector (I think it's a vector)
+sum(y)  # how many are greater than 10?
+mean(y) # what proportion are greater than 10?
+```
+
+ This relies on the fact that R coerces TRUE into integer 1 and all else to 0.
+ 
+ ### Scalars and recycling rules
+
+As well as implicitly coercing the types of vectors to be compatible, R will also implicitly coerce the length of vectors.
+This is called vector **recycling**, because the shorter vector is repeated, or recycled, to the same length as the longer vector.
+
+This is generally most useful when you are mixing vectors and "scalars".
+
+Because there are no scalars, most built-in functions are **vectorised**, meaning that they will operate on a vector of numbers.
+That's why, for example, this code works:
+
+```{r}
+sample(10) + 100
+runif(10) > 0.5
+5*sample(5,10,replace=TRUE)
+```
+
+`runif` is not a conditional `if` statement. It is a `r`andom draw from the [0,1] (`u`niform) interval
+
+### Naming vectors
+
+All types of vectors can be named.
+You can name them during creation with `c()`:
+
+```{r}
+c(x = 1, y = 2, z = 4)
+```
+
+Or after the fact with `purrr::set_names()`:
+
+```{r}
+set_names(1:3, c("a", "b", "c"))
+```
+
+Named vectors are most useful for subsetting, described next.
+
+### Subsetting {#vector-subsetting}
+
+So far we've used `dplyr::filter()` to filter the rows in a tibble.
+`filter()` only works with tibble, so we'll need a new tool for vectors: `[`.
+`[` is the subsetting function, and is called like `x[a]`.    
+
+There are four types of things that you can subset a vector with:
+
+1.  A numeric vector containing only integers.
+    The integers must either be all positive, all negative, or zero.
+
+    Subsetting with positive integers keeps the elements at those positions:
+
+    ```{r}
+    x <- c("one", "two", "three", "four", "five")
+    x[c(3, 2, 5)]
+    ```
+
+    By repeating a position, you can actually make a longer output than input:
+
+    ```{r}
+    x[c(1, 1, 5, 5, 5, 2)]
+    ```
+
+    Negative values drop the elements at the specified positions:
+
+    ```{r}
+    x[c(-1, -3, -5)]
+    ```
+
+    It's an error to mix positive and negative values:
+
+    ```{r, error = TRUE}
+    x[c(1, -1)]
+    ```
+
+2.  Subsetting with a logical vector keeps all values corresponding to a `TRUE` value.
+    This is most often useful in conjunction with the comparison functions.
+
+    ```{r}
+    x <- c(10, 3, NA, 5, 8, 1, NA)
+    # All non-missing values of x
+    x[!is.na(x)]
+    # All even (or missing!) values of x
+    x[x %% 2 == 0]
+    ```
+
+3.  If you have a named vector, you can subset it with a character vector:
+
+    ```{r}
+    x <- c(abc = 1, def = 2, xyz = 5)
+    x[c("xyz", "def")]
+    ```
+
+
+4.  The simplest type of subsetting is nothing, `x[]`, which returns the complete `x`.
+    This is not useful for subsetting vectors, but it is useful when subsetting matrices (and other high dimensional structures) because it lets you select all the rows or all the columns, by leaving that index blank.
+    For example, if `x` is 2d, `x[1, ]` selects the first row and all the columns, and `x[, -1]` selects all rows and all columns except the first. *(NOTE TO SELF: This last one is quite different from python, and a little unintuitive.)*
+
+To learn more about the applications of subsetting, reading the "Subsetting" chapter of *Advanced R*: <http://adv-r.had.co.nz/Subsetting.html#applications>.
+
+There is an important variation of `[` called `[[`.
+`[[` only ever extracts a single element, and always drops names.
+It's a good idea to use it whenever you want to make it clear that you're extracting a single item, as in a for loop.
+The distinction between `[` and `[[` is most important for lists, as we'll see shortly.
+
+### From the Exercises
+
+The expression `sum(!is.finite(x))` calculates the number of elements in the vector that are equal to missing (NA), not-a-number (NaN), or infinity (Inf).
+
+I HADN'T REALIZED THAT NA = 'missing' and NaN = 'not-a-number' until now. 
+
+#### Exercise 20.4.4
+
+Two uses for this exercise. One, it's one of my first exposures to `function()` and
+the first two answers contrast `[]` from `[[]]`, which seem important and easy to 
+confuse. 
+
+Create functions that take a vector as input and returns:
+
+1. The last value. Should you use [ or [[?
+
+```{r}
+last_value <- function(x) {
+  # check for case with no length
+  if (length(x)) {
+    x[[length(x)]]
+  } else {
+    x
+  }
+}
+last_value(numeric())
+
+last_value(1)
+
+last_value(1:10)
+
+```
+
+
+2. The elements at even numbered positions.
+
+```{r}
+even_indices <- function(x) {
+  if (length(x)) {
+    x[seq_along(x) %% 2 == 0]
+  } else {
+    x
+  }
+}
+even_indices(numeric())
+
+even_indices(1)
+
+even_indices(1:10)
+
+even_indices(letters)
+
+```
+
+Creating a sequence in a vector:
+
+```{r}
+x <- seq(from = 10, to = 40, by = 10)
+y <- seq(from = 1, to = 4, by = 1)^2
+x
+y
+```
+
+Repeating data in a vector:
+```{r}
+one_to_ten_1 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+one_to_ten_2 <- 1:10
+ten_to_one <- 10:1
+
+one_to_ten_1
+one_to_ten_2
+ten_to_one
+```
+
+
+```{r}
+
+set.seed(1) 
+
+rows <- 101 
+
+d <- data.table(id = 1:rows) 
+d[ , ':='(treat = sample(c(0,1), .N, replace = TRUE), 
+          x1 = rnorm(.N), 
+          x2 = rbinom(.N, 2, .25),
+          x3 = sample(c("green", "blue", "red"), .N, replace = TRUE), 
+          block = factor(sample(c("A", "B", "C"), .N , replace = TRUE)))
+  ]
+
+d
+```
+
+
+
+
+Using `rep`licate
+
+Two arguments: `times` or `each`:
+```{r}
+letter_vector <- c('a', 'b', 'c')
+
+rep(letter_vector, times = 3)
+rep(letter_vector, each = 3)
+
+rep(1:4, times = 1:4)
+
+```
+
+Draws from a normal distribution:
+
+n = 8 draws from a normal distribution with mean 100 and sd = 20
+```{r}
+rnorm(n = 8, mean = 100, sd = 20)
+```
+
+Draws from the uniform distribution
+```{r}
+draws <- runif(n = 1000, min = -1, max = 9)
+hist(draws, col = 'black')
+```
+Draw from a vector using the `sample()` function with or without replacement
+
+```{r}
+urn <- c('red_ball', 'blue_ball', 'green_ball')
+sample(x = urn, size = 4, replace = T)
+```
+
+To shuffle (makes use of default arguments):
+```{r}
+sample(urn)
+```
+
+
+```{r}
+s <- c(1:10)^2
+s
+```
+```{r}
+
+s[1:4]
+s[c(1, 3, 5)]
+
+boolean_asker <- c(rep(T,5), rep(F, 5))
+s[boolean_asker]
+s[s > 25]
+
+```
+Make a matrix:
+```{r}
+m <- matrix(data = 1:10, ncol = 2)
+m
+m[c(1,2), c(2,1)]
+```
+
+
+
+
+
+## Recursive vectors (lists) {#lists}
+
+
+Lists are a step up in complexity from atomic vectors, because lists can contain other lists.
+This makes them suitable for representing hierarchical or tree-like structures.
+You create a list with `list()`:
+
+```{r}
+x <- list(1, 2, 3)
+x
+```
+
+A very useful tool for working with lists is `str()` because it focusses on the **str**ucture, not the contents.
+
+```{r}
+y <- list("a", 1L, 1.5, TRUE)
+str(y)
+```
+
+Lists can even contain other lists!
+
+```{r}
+z <- list(list(1, 2), list(3, 4))
+str(z)
+```
+
+To explain more complicated list manipulation functions, it's helpful to have a visual representation of lists.
+For example, take these three lists:
+
+```{r}
+x1 <- list(c(1, 2), c(3, 4))
+x2 <- list(list(1, 2), list(3, 4))
+x3 <- list(1, list(2, list(3)))
+```
+
+I'll draw them as follows:
+
+```{r, echo = FALSE, out.width = "50%"}
+knitr::include_graphics("/home/jovyan/RBridge/lists-structure.png")
+#![20.1](/home/jovyan/RBridge/vector_hierarchy.png)
+
+```
+
+There are three principles:
+
+1.  Lists have rounded corners.
+    Atomic vectors have square corners.
+
+2.  Children are drawn inside their parent, and have a slightly darker background to make it easier to see the hierarchy.
+
+3.  The orientation of the children (i.e. rows or columns) isn't important, so I'll pick a row or column orientation to either save space or illustrate an important property in the example.
+
+### Subsetting
+
+There are three ways to subset a list, which I'll illustrate with a list named `a`:
+
+```{r}
+a <- list(a = 1:3, b = "a string", c = pi, d = list(-1, -5))
+```
+
+-   `[` extracts a sub-list.
+    The result will always be a list.
+
+    ```{r}
+    str(a[1:2])
+    str(a[4])
+    ```
+
+    Like with vectors, you can subset with a logical, integer, or character vector.
+
+-   `[[` extracts a single component from a list.
+    It removes a level of hierarchy from the list.
+
+    ```{r}
+    str(a[[1]])
+    str(a[[4]])
+    ```
+
+-   `$` is a shorthand for extracting named elements of a list.
+    It works similarly to `[[` except that you don't need to use quotes.
+
+    ```{r}
+    a$a
+    a[["a"]]
+    ```
+
+### More vector stuff
+
+```{r}
+v <- c(1,2,3,4,6)
+```
+
+If a vector is one-dimensional, then we can either:
+
+- Reference a location in that vector:
+  - `v[2]` Will print the value in the second position
+  - `v[5]` Will print the value in the fifth position
+  - `v[c(2,5)]`  Will print the value in the second and fifth positions
+  - `v[-1]`  Will print everything but the first *note the difference between this and python* 
+- Pass a logical test that will print values
+  - `v == 2` Tests for each value in that vector taking a particular tested, in this case, 2. 
+
+And so, 
+
+- `v[v == 2]` Will print only the values that meet the test.
+- `v[v == 6]` Will not print anything
+- `v[v %in% 1:3]` uses the set-based `%in%` operator which looks for existence in a range.  
+
+
+```{r}
+# returns by position
+v[2]
+v[5]
+v[c(2,5)]
+# everything but the first position
+v[-1]
+v == 2
+v[v == 2]
+
+v %in% 1:3
+v[ v %in% 1:3 ]
+
+```
+
+
+The distinction between `[` and `[[` is really important for lists, because `[[` drills down into the list while `[` returns a new, smaller list.
+
+
+```{r} 
+df <- data.frame(
+  id=1:20,
+  value=(1:20) ** 2,
+  type=rep(LETTERS[1:5], each=4) 
+  )
+df
+```
+```{r}
+df[c(1,4), c(1,3)]
+```
+
+
+
+
+
+# Augmented vectors
+
+Atomic vectors and lists are the building blocks for other important vector types like factors and dates.
+I call these **augmented vectors**, because they are vectors with additional **attributes**, including class.
+Because augmented vectors have a class, they behave differently to the atomic vector on which they are built.
+In this book, we make use of four important augmented vectors:
+
+-   Factors
+-   Dates
+-   Date-times
+-   Tibbles
+
+These are described below.
+
+### Dates and date-times
+
+Dates in R are numeric vectors that represent the number of days since 1 January 1970.
+
+```{r}
+x <- as.Date("1971-01-01")
+unclass(x)
+typeof(x)
+attributes(x)
+```
+
+
+### Caching
+
+If document rendering becomes time consuming due to long computations you can use knitr caching to improve performance. *[Knitr chunk and package options](http://yihui.name/knitr/options)* describes how caching works and the *[Cache examples](http://yihui.name/knitr/demo/cache/)* provide additional details.
+
+
+## Fitting models
+
+
+```{r}
+x <- runif(300,  min=-30, max=30) 
+y <- -1.2*x^3 + 1.1 * x^2 - x + 10 + rnorm(length(x),0,100*abs(x)) 
+ 
+## Can we find a polynome that fit this function ?
+model <- lm(y ~ x + I(x^2) + I(x^3))
+myPredict <- predict(model, interval="predict")
+ 
+# Basic plot of x and y :
+plot(x, y, col=rgb(0.4,0.4,0.8,0.6), pch=16 , cex=1.3 , xlab="" , ylab="") 
+  ix <- sort(x, index.return=T)$ix
+  lines(x[ix], myPredict[ix , 1], col=2, lwd=2)  
+  polygon(
+    c(rev(x[ix]), x[ix]),
+    c(rev(myPredict[ix, 3]), myPredict[ix, 2]),
+    col = rgb(0.7, 0.7, 0.7, 0.4) ,
+    border=NA)
+```
+
+What's unfamiliar in the code above?
+
+1. The `I`'s in the `model`
+
+2. This line 
+
+   `ix <- sort(x, index.return=T)$ix`
+
+   and
+   
+   `polygon()`
+
+
+### Dataframes
+
+```{r}
+rep(LETTERS[1:5], each=4)
+
+rep(LETTERS[1:5], times=4)
+```
+
+```{r}
+df <- data.frame(
+  id=1:20,
+  value=(1:20) ** 2,
+  type=rep(LETTERS[1:5], each=4) 
+  )
+df
+filter(df, df$id <= 10)
+```
+
+
+Choosing a set of rows by position with `slice()`
+
+```{r}
+df %>% slice(1:6)
+```
+
+No entry in the row space means 'all rows'; the specific number 3 means the 3rd column
+```{r}
+df[ ,3]
+```
+
+#### Two ways to subset the rows of the dataframe
+
+With `filter()`
+
+```{r}
+filter(df, type == 'A')
+```
+
+With a boolean vector:
+
+(Note the comma below. The boolean vector selects the TRUE rows and the comma followed by the space selects all the columns.)
+
+```{r}
+df$type == 'A'
+
+df[df$type == 'A', ]
+
+df$id[df$type == "A"]
+```
+
+
+```{r}
+df[df$type == "A", "id"]
+```
+
+Some light practice
+
+How would you write a call for the first 10 ids, pulling all of the columns? (The answers for each of these will follow in a short block)
+
+```{r}
+df %>% slice(1:10)
+```
+Alternatively:
+
+```{r}
+df[1:10, ]
+```
+Slight tweak:
+```{r}
+df[1:10, c('id', 'type')]
+```
+
+How would you pull all of the odd ids?
+
+```{r}
+
+df[df$id %% 2 == 1, "id"]
+
+df[df$id %% 2 == 1, 1]
+```
+
+How would you pull all of the odd ids, that are of type indicated by a vowel? (Hint: You can combine the statements with the logical operator & )
+
+First approach:
+
+```{r}
+
+df[(df$id %% 2 == 1) & (df$type %in% c('A','E','I','O','U')), ]
+
+```
+
+How would you pull the rows that either have an id that is in the set 1:2 OR have a type that is equal to E? (Hint: You can combine the statements ith the logical operator | which reads as inclusive OR)
+
+```{r}
+
+df[ df$id %in% c(1:2) | df$type == 'E' , ]
+
+```
+
+### Formula notation and the tilde ~
+# ~
+
+The formula tilde: `~` is a common thread through R. Most base functions that involve the comparison of some feature by some other feature have a built in method that is based on the formula tilde.
+
+For example, in the `data.frame` `df` from above, if we wanted to compare the values for ids greater than 10 to those ten and below, we might use the following call:
+
+```{r}
+t.test(value ~ id > 10, data = df)
+```
+
+How to interpret: `id > 10` creates a boolean vector. 
+
+`t.test(value ~ id > 10, data = df)`
+
+Calculates the t-test between values where `id > 10` and `id <= 10`.
+
+Or a boxplot:
+
+```{r}
+boxplot(value ~ id > 10, data = df)
+```
+
+
+## `data.table()`
+
+- Alternative to `dplyr` and `data.frame()`.
+
+- Better for working with big data
+
+- Some of the notation is as clear or clearer than base R and `dplyr`
+
+This is *much less* comprehensive than the great guides that are available from the package authors: 
+
+- [project homepage](https://github.com/Rdatatable/data.table/wiki)
+- [cheat sheet](https://s3.amazonaws.com/assets.datacamp.com/img/blog/data+table+cheat+sheet.pdf)
+- [data camp](https://www.datacamp.com/courses/data-table-data-manipulation-r-tutorial)
+
+```{r} 
+library(data.table) 
+``` 
+
+
+```{r}
+df <- data.frame(
+  id=1:20,
+  value=(1:20) ** 2,
+  type=rep(LETTERS[1:5], each=4) 
+  )
+df
+```
+
+
+Lets cast our df into a data.table
+
+```{r}
+dt <- data.table(df)
+``` 
+
+We can make the same splits as before, but data.tables are *even* more self-aware that they are groupings of data. What do I mean? Well, inside a data.table object, it is not necessary to re-reference the data table. For example, recall the following subset from earlier
+
+```{r} 
+df[df$id < 10, "type"]
+``` 
+
+In a data table, scoping the name search is not necessary; because you've already indexed into the data.table, the default belief that is that you want to search that data.table, not some other object in memory. Additionally, you need not quote the vector that you want to return: 
+
+```{r}
+dt[id < 10, type]
+``` 
+
+## Referencing in a data.table. 
+
+Whereas in a data.frame one would create a new vector in the following way:
+
+```{r}
+df$age <- sample(18:30, size = 20, replace = TRUE)
+df
+```
+
+in a data.table this reference comes via the `:=` operator, and occurs
+*within* a slice of the object. If we are creating a new column vector, then
+we would locate this *in the column position in the slice*, and just assign
+away. 
+
+```{r} 
+dt[ , age := sample(18:30, size = 20, replace = TRUE)]
+dt[ , edu := sample(c("Low", "Med", "High"), size = .N, replace = TRUE)]
+dt[1:10,]
+``` 
+
+(What's happening with that `.N` call? This is a shortcut to say "for as many times as there are." This becomes useful when you don't know ahead of time how many time will be present.
+
+Notice that there is no indexing in the row position in this first case
+that is:
+
+`dt[ NOTHING HERE BEFORE COMMA, age := sample(18:30, size=20, replace=TRUE)]`
+
+So, we're just assigning onto all the rows. 
+
+```{r} 
+dt[id < 10, age.low := sample(18:30, size = .N, replace = T)]
+dt[id >= 10 & id %% 3 == 0, age.low := 100]
+dt[id >= 10 & id %% 4 == 0, age.low := sample(c(200, 300), .N, replace = TRUE)]
+dt
+``` 
+
+`potential_outcomes_as_theoretical_concepts.Rmd` in week_2 for 241 is excellent `data.table` practice. 
+
+
+
+## Returning vectors togther.
+
+In a data.frame, we might call:
+
+```{r} 
+df[1:5 , c("value", "type")] # to reference columns by name
+``` 
+
+There is a similar construct in a data table. 
+
+```{r}
+dt[1:5 , list(value, type)] # which produces the same output
+``` 
+
+Why are those in a list, rather than a character vector? Don't get too lost in it just yet, but a *huge* benefit is that we're going to be able to perform functions against columns. Since those columns might return something that has as different shape than what we started with, we're going to use the more flexible list structure, than the character vector structure. 
+
+## **Note that in a `data.table` we do NOT quote the variable names. Note too that typing `list()`  could get a little old, so there is a *strongly recommended* alias to this call: `.()`**
+
+```{r} 
+dt[1:5 , .(value, type)]
+``` 
+
+
+
+## Returning mappings of vectors
+
+Fine, being able to reference things in the row and column space is a good start, but what if we want to summarize the data in some way? You can perform *any* transformation you like against the columns -- simple call for that transformation in the column space of the data.table.
+
+What we've called to this point hasn't made any transformations; instead, we've just been returning the whole vector. 
+
+```{r}
+dt[1:5 , value] # will print all of the values
+``` 
+
+But if we want the average of that vector of columns? Then, we can call for the `mean` function of the column that we're interested in, *within* the column space of the data.table. 
+
+```{r}
+dt[ , mean(value)] # will print that mapping of values
+dt[ , sd(value)]
+dt[ , var(value)]
+``` 
+
+But, other actions -- such as plotting a histogram, or running a regression, are also simply functions applied to columns. So these, too can work in the column space.
+
+```
+dt[ , hist(value)]
+dt[ , lm(value ~ type)]
+```
+
+## What gets returned? 
+
+Note that if we call for a simple aggregation of a single summary, what we get back is in the form of a vector -- in this case a single element vector. 
+
+```{r}
+dt[ , mean(value)]
+class(dt[ , mean(value)])
+``` 
+This is useful for all kinds of tasks, especially if you're passing into another function. 
+
+But, if we pass that same call, but wrapped in a list, then we will return an object whose class is a `data.table`. Meaning that we can keep this as a data.table for further work, or storage. An added benefit, is that since this is a data.table, we can also name the returns, or return multiple concepts. 
+
+```{r}
+dt[ , .(mean(value))]
+
+
+dt[ , .(mean_value = mean(value),
+        sd_value   = sd(value)) ] 
+``` 
+But, why might this be useful?
+
+We can map several pieces of data, perhaps to move from a stored table into something that we want to use for analysis.
+
+```{r}
+dt[ , .(mean(value), sum(type == "A"))]
+``` 
+One more example: 
+
+The advantage of this is you can create new data structures that you can carry with you onto your
+next step. 
+
+```{r}
+foo <- dt[ , .(average_value = mean(value),
+               count_of_rows = .N)]
+foo[ , count_of_rows]
+```
+
+
+
+
+
+Note that what came back is a data.table, with two variables created,
+`V1` and `V2`. These are generic names assigned because we didn't provide a name for the new columns.
+
+We could name those in the last call:
+
+```{r}
+dt[ , .(m_value = mean(value), num_A = sum(type == "A")) ]
+``` 
+
+## Grouping 
+
+Grouping in a data.frame can be a little clunky (though it does
+again show that the tilde is in *all places*).
+
+My first time seeing `aggregate()`. Up until now, had only seen `group_by()`.
+
+```{r}
+aggregate(value ~ type, FUN = mean, data = df)
+aggregate(value ~ type, FUN = function(x) sqrt(var(x)), data = df)
+```
+
+
+Grouping in data.tables, is a little less clunky. Rather than using the
+aggregate call, we can pass a function into the column position, just like
+earlier, but we pass an additional argument: either `by` or `keyby` after the column position.  (The difference between `by` and `keyby` is that `keyby` sorts the results by the grouping feature, while `by` instead returns the result in the order that they are observed in the data.table. 
+
+```{r} 
+dt[ , .(mean(value))]
+
+dt[ , .(mean(value)), by = type]
+dt[ , .(sqrt(var(value))), by = type]
+
+dt[ , . (m.value = mean(value), sd.value = sqrt(var(value)) ),
+   by = type ]
+
+dt[ , .(mean(value)), keyby = .(type, edu)]
+
+```
+
+# Very Quick Practice
+
+Do some *very* quick practice using the **Titanic** data set that I'm sure you've all seen 100 times before.
+
+```{r}
+install.packages('titanic')
+library(titanic)
+
+d <- titanic_train
+```
+
+## Questions to answer
+
+1. Use the `mean` function to calculate the average rate of survival. 
+
+```{r}
+dt_titanic <- data.table(d)
+glimpse(dt_titanic)
+
+```
+```{r}
+dt_titanic[ , mean(Survived)]
+```
+
+2. Use the `table` function to count the distribution of `Pclass`.
+
+```{r}
+dt_titanic[ , table(Pclass)]
+```
+
+
+3. In a single return table, show the proportion who are female `mean(Sex == "female")` and the average age. Look into `?mean` to see how to deal with missing numbers, stored as NA in R.
+
+```{r}
+dt_titanic[ , .(mean(Sex == "female"), mean(Age, na.rm = T))] 
+```
+
+
+4. Calculate the survival rate, grouped by Sex.
+
+```{r}
+dt_titanic[ , mean(Survived), by = Sex]
+```
+```{r}
+glimpse(dt_titanic)
+```
+
+
+5. Calculate the average fare, grouped by where the passengers `Embarked`. 
+
+```{r}
+dt_titanic[ , mean(Fare), by = Embarked]
+
+```
+
+`2_sampling_distribution_and_ri.Rmd` in week 3/unit 3 has some more advanced, good examples   
+of data table operations. Consider inserting some here.
+
+Here's an example slightly tweaked from that file:
+
+```{r}
+
+dt2 <- data.table(id = 1:40)
+# just creating these to have a reason to group by
+dt2[ , condition := sample( c(rep('treatment', 20), rep('control', 20)))]
+# dummy values
+dt2[ , observation := runif(40, min = 0, max = 100)]
+
+group_averages2 <- dt2[  , .(group_mean = mean(observation)), keyby = 'condition']
+
+dt2
+group_averages2
+
+# could create differences in those group means in a single line, like this:
+dt2[  , .(group_mean = mean(observation)), keyby = 'condition'][ , diff(group_mean)  ]
+
+```
+
+This code snippet is from week 3/unit 3's `the_sharp_null_hypothesis.Rmd`. It won't   
+run, but it's a good example of a `data.table` operations syntax. To create a new data    
+table `d_experiment` from `d`, you'd need to surround the column names you selected   
+with .(), as shown below. 
+
+`d_experiment <- d[ , .(id, outcomes, condition, group)]`
+
+
+
+Section on looping
+
+
+`Replicate()` repeat commands without looping. 
+
+```{r}
+
+distribution_of_series <- replicate(5000, mean(rnorm(10, 13, 43))  )
+mean(distribution_of_series)
+hist(distribution_of_series, breaks = 50)
+
+```
+
+
+
+
+Add something explicity in how to access specific data points or sets of datapoints   
+across different data structures. 
+
+In `simulate_power.Rmd`, there's a good example of a function returning multiple elements and how to reference    
+those elements. Put in a function section. 
+
+
+# Regression, modeling
+
+Some good specifics in my unit_4 folder within this file: `my_file_for_4.4_Blocking.Rmd`
+
+THIS SEEMS A BIT LIKE THE LAMBDA FUNCTION OF R
+
+```{r}
+# Create classrooms 
+n_classrooms <- 8
+# Create students in classrooms 
+n_students <- 16
+``` 
+
+With these parameters, we have `r n_classrooms * n_students` observations.  
+
+```{r} 
+classroom_ids0 <- unlist(lapply(1:n_classrooms, function(x) rep(x,times=n_students)))
+classroom_ids0
+``` 
+
+
+David B. makes the point that the previous line of code might be a little tough to understand. Another, equivalent, and easier to comprehend way to do this task would be to call: 
+
+```{r}
+classroom_ids <- rep(1:n_classrooms, each = n_students)
+classroom_ids
+table(classroom_ids0 == classroom_ids)
+``` 
+
+The second term in this is a subtle use of indexing I wouldn't have thought of. 
+
+
+Here, we assign some classroom-level noise -- think of this as being located in the cool, or not-cool wings of the high-school.
+
+```{r}
+classroom_level_noise <- rnorm(n = length(all_classrooms), 
+                               mean = 0, sd = 1)
+classroom_level_noise
+```
+
+```{r}
+student_outcomes_control <- rnorm(length(classroom_ids)) + classroom_level_noise[classroom_ids]
+```
+
+Classroom level noise is indexed from 1 to 8. `classroom_ids` are a sequence of repeated 1s, 2s, ...8s. So when they're passed to
+`classroom_level_noise` they pull out the 1st, 2nd, etc. element of `classroom_level_noise`. 
+
+```{r}
+classroom_level_noise[classroom_ids]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+?runif
+```
+
+
+```{r}
+sample(20)
+```
+
+    Avoid using `==` to check for these other special values.
+    Instead use the helper functions `is.finite()`, `is.infinite()`, and `is.nan()`:
+
+    |                 | 0   | Inf | NA  | NaN |
+    |-----------------|-----|-----|-----|-----|
+    | `is.finite()`   | x   |     |     |     |
+    | `is.infinite()` |     | x   |     |     |
+    | `is.na()`       |     |     | x   | x   |
+    | `is.nan()`      |     |     |     | x   |
+
+
+Test Functions:
+
+|                  | lgl | int | dbl | chr | list |
+|------------------|-----|-----|-----|-----|------|
+| `is_logical()`   | x   |     |     |     |      |
+| `is_integer()`   |     | x   |     |     |      |
+| `is_double()`    |     |     | x   |     |      |
+| `is_numeric()`   |     | x   | x   |     |      |
+| `is_character()` |     |     |     | x   |      |
+| `is_atomic()`    | x   | x   | x   | x   |      |
+| `is_list()`      |     |     |     |     | x    |
+| `is_vector()`    | x   | x   | x   | x   | x    |
+
+
+
+#### Visualizing lists
+
+
+`regression_analysis_notebook.Rmd` in unit_5 folder has a lot of good stuff on 
+data cleanup and manipulation. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

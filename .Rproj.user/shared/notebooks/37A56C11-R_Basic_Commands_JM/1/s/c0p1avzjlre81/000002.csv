@@ -1,0 +1,4 @@
+"0","filter(diamonds, x > 0, x < 10) %>%"
+"0","  ggplot() +"
+"0","  geom_histogram(mapping = aes(x = x), binwidth = 0.01) +"
+"0","  scale_x_continuous(breaks = 1:10)"

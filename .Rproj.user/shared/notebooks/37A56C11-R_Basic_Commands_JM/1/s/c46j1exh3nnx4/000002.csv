@@ -1,0 +1,2 @@
+"0","diamonds2 <- diamonds %>% "
+"0","  mutate(y = ifelse(y < 3 | y > 20, NA, y))"

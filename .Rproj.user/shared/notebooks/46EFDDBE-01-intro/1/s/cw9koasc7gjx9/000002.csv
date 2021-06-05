@@ -1,0 +1,9 @@
+"0","library(tidyverse)"
+"2","[0;1;31mSystem has not been booted with systemd as init system (PID 1). Can't operate.[0m
+"
+"2","[0;1;31mFailed to create bus connection: Host is down[0m
+"
+"0","devtools::install_github(""kjhealy/nycdogs"")"
+"0","library(nycdogs)"
+"0","library(ggplot2) # for mpg dataset"
+"0",""

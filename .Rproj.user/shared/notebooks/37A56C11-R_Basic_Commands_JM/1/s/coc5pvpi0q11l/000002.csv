@@ -1,0 +1,13 @@
+"0","dog_name = 'Princess'"
+"0",""
+"0","where_dog_name <-"
+"0","  nyc_license %>% "
+"0","    group_by(zip_code, animal_name) %>%  # group by these 2"
+"0","    summarise(total = n()) %>%  # count number of each animal name in each zip code, assign to variable total"
+"0","    mutate(freq = (total / sum(total)) * 100) %>%  # create a frequency column from total variable"
+"0","    filter(animal_name == dog_name) #%>%  # filter for just 'Princess'"
+"2","`summarise()` has grouped output by 'zip_code'. You can override using the `.groups` argument.
+"
+"0","    #left_join(nyc_zips, .) "
+"0",""
+"0","head(where_dog_name)"

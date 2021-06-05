@@ -1,0 +1,5 @@
+"0","smaller <- diamonds %>% "
+"0","  filter(carat < 3)"
+"0","  "
+"0","ggplot(data = smaller, mapping = aes(x = carat)) +"
+"0","  geom_histogram(binwidth = 0.1)"

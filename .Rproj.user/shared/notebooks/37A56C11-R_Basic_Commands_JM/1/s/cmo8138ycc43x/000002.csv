@@ -1,0 +1,2 @@
+"0","head(diamonds %>% "
+"0","  count(color, cut), 10)"

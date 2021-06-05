@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Summary &amp; Overview Functions | Joe’s R Guide</title>
+  <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Summary &amp; Overview Functions | Joe’s R Guide" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Summary &amp; Overview Functions | Joe’s R Guide" />
+  
+  <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  
+
+<meta name="author" content="Joe Mirza" />
+
+
+<meta name="date" content="2021-06-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="vectors.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> R Studio Environment</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#r-studio-vs.-r-and-r-markdown"><i class="fa fa-check"></i><b>1.1</b> R Studio vs. R and R Markdown</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#rstudio-and-the-file-system"><i class="fa fa-check"></i><b>1.2</b> RStudio and the File System</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#ls-vs.-list.files"><i class="fa fa-check"></i><b>1.3</b> <code>ls()</code> vs. <code>list.files()</code></a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#handy-shortcuts"><i class="fa fa-check"></i><b>1.4</b> Handy Shortcuts</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Summary &amp; Overview Functions</a><ul>
+<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#rstudio-cheatsheets-master-list"><i class="fa fa-check"></i><b>2.1</b> <span>RStudio Cheatsheets (master list)</span></a></li>
+<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>2.2</b> <code>summary</code></a></li>
+<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#print-glimpse-str"><i class="fa fa-check"></i><b>2.3</b> <code>print</code>, <code>glimpse</code> &amp; <code>str</code></a></li>
+<li class="chapter" data-level="2.4" data-path="intro.html"><a href="intro.html#dim-row-and-col"><i class="fa fa-check"></i><b>2.4</b> <code>dim</code>, <code>row</code> and <code>col</code></a></li>
+<li class="chapter" data-level="2.5" data-path="intro.html"><a href="intro.html#count"><i class="fa fa-check"></i><b>2.5</b> <code>count()</code></a></li>
+<li class="chapter" data-level="2.6" data-path="intro.html"><a href="intro.html#table"><i class="fa fa-check"></i><b>2.6</b> <code>table()</code></a></li>
+<li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#head-and-tail-functions-in-r"><i class="fa fa-check"></i><b>2.7</b> <code>head()</code> and <code>tail()</code> Functions in R</a></li>
+<li class="chapter" data-level="2.8" data-path="intro.html"><a href="intro.html#names"><i class="fa fa-check"></i><b>2.8</b> <code>names()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="vectors.html"><a href="vectors.html"><i class="fa fa-check"></i><b>3</b> Vectors</a><ul>
+<li class="chapter" data-level="3.1" data-path="vectors.html"><a href="vectors.html#vector-basics"><i class="fa fa-check"></i><b>3.1</b> Vector basics</a></li>
+<li class="chapter" data-level="3.2" data-path="vectors.html"><a href="vectors.html#important-types-of-atomic-vector"><i class="fa fa-check"></i><b>3.2</b> Important types of atomic vector</a></li>
+<li class="chapter" data-level="3.3" data-path="vectors.html"><a href="vectors.html#logical"><i class="fa fa-check"></i><b>3.3</b> Logical</a></li>
+<li class="chapter" data-level="3.4" data-path="vectors.html"><a href="vectors.html#numeric"><i class="fa fa-check"></i><b>3.4</b> Numeric</a></li>
+<li class="chapter" data-level="3.5" data-path="vectors.html"><a href="vectors.html#character"><i class="fa fa-check"></i><b>3.5</b> Character</a></li>
+<li class="chapter" data-level="3.6" data-path="vectors.html"><a href="vectors.html#scalars-and-recycling-rules"><i class="fa fa-check"></i><b>3.6</b> Scalars and recycling rules</a></li>
+<li class="chapter" data-level="3.7" data-path="vectors.html"><a href="vectors.html#naming-vectors"><i class="fa fa-check"></i><b>3.7</b> Naming vectors</a></li>
+<li class="chapter" data-level="3.8" data-path="vectors.html"><a href="vectors.html#vector-subsetting"><i class="fa fa-check"></i><b>3.8</b> Subsetting</a></li>
+<li class="chapter" data-level="3.9" data-path="vectors.html"><a href="vectors.html#exercises"><i class="fa fa-check"></i><b>3.9</b> Exercises</a><ul>
+<li class="chapter" data-level="3.9.1" data-path="vectors.html"><a href="vectors.html#exercise-1"><i class="fa fa-check"></i><b>3.9.1</b> Exercise 1</a></li>
+<li class="chapter" data-level="3.9.2" data-path="vectors.html"><a href="vectors.html#exercise-2"><i class="fa fa-check"></i><b>3.9.2</b> Exercise 2</a></li>
+<li class="chapter" data-level="3.9.3" data-path="vectors.html"><a href="vectors.html#exercise-3-seq"><i class="fa fa-check"></i><b>3.9.3</b> Exercise 3: <code>seq()</code></a></li>
+<li class="chapter" data-level="3.9.4" data-path="vectors.html"><a href="vectors.html#exercise-4-rep"><i class="fa fa-check"></i><b>3.9.4</b> Exercise 4: <code>rep()</code></a></li>
+<li class="chapter" data-level="3.9.5" data-path="vectors.html"><a href="vectors.html#exercise-5-sampling-vectors"><i class="fa fa-check"></i><b>3.9.5</b> Exercise 5: Sampling vectors</a></li>
+<li class="chapter" data-level="3.9.6" data-path="vectors.html"><a href="vectors.html#exercise-6-make-a-matrix"><i class="fa fa-check"></i><b>3.9.6</b> Exercise 6: Make a <code>matrix()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3.10" data-path="vectors.html"><a href="vectors.html#lists"><i class="fa fa-check"></i><b>3.10</b> Recursive vectors (lists)</a><ul>
+<li class="chapter" data-level="3.10.1" data-path="vectors.html"><a href="vectors.html#subsetting"><i class="fa fa-check"></i><b>3.10.1</b> Subsetting</a></li>
+<li class="chapter" data-level="3.10.2" data-path="vectors.html"><a href="vectors.html#more-vector-stuff"><i class="fa fa-check"></i><b>3.10.2</b> More vector stuff</a></li>
+<li class="chapter" data-level="3.10.3" data-path="vectors.html"><a href="vectors.html#lists-of-condiments"><i class="fa fa-check"></i><b>3.10.3</b> Lists of condiments</a></li>
+</ul></li>
+<li class="chapter" data-level="3.11" data-path="vectors.html"><a href="vectors.html#augmented-vectors"><i class="fa fa-check"></i><b>3.11</b> Augmented vectors</a><ul>
+<li class="chapter" data-level="3.11.1" data-path="vectors.html"><a href="vectors.html#dates-and-date-times"><i class="fa fa-check"></i><b>3.11.1</b> Dates and date-times</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a></li>
+<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a><ul>
+<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
+<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="7" data-path="dates.html"><a href="dates.html"><i class="fa fa-check"></i><b>7</b> Dates</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Joe’s R Guide</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="intro" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> Summary &amp; Overview Functions</h1>
+<p>Basic dataframe for some of the examples below.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="intro.html#cb10-1"></a>d &lt;-<span class="st"> </span><span class="kw">data.frame</span>(     </span>
+<span id="cb10-2"><a href="intro.html#cb10-2"></a>  <span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>,     </span>
+<span id="cb10-3"><a href="intro.html#cb10-3"></a>  <span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="dv">1000</span>, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>),    </span>
+<span id="cb10-4"><a href="intro.html#cb10-4"></a>  <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dv">1000</span>, <span class="dt">mean =</span> <span class="dv">10</span>, <span class="dt">sd =</span> <span class="dv">2</span>),     </span>
+<span id="cb10-5"><a href="intro.html#cb10-5"></a>  <span class="dt">color =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&#39;red&#39;</span>, <span class="st">&#39;blue&#39;</span>), <span class="dt">size =</span> <span class="dv">1000</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)    </span>
+<span id="cb10-6"><a href="intro.html#cb10-6"></a>) </span></code></pre></div>
+<p>You can label chapter and section titles using <code>{#label}</code> after them, e.g., we can reference Chapter <a href="intro.html#intro">2</a>. If you do not manually label them, there will be automatic labels anyway, e.g., Chapter <a href="methods.html#methods">4</a>.</p>
+<p>Figures and tables with captions will be placed in <code>figure</code> and <code>table</code> environments, respectively.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="intro.html#cb11-1"></a><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="fl">.1</span>, <span class="fl">.1</span>))</span>
+<span id="cb11-2"><a href="intro.html#cb11-2"></a><span class="kw">plot</span>(pressure, <span class="dt">type =</span> <span class="st">&#39;b&#39;</span>, <span class="dt">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:nice-fig"></span>
+<img src="Joes_R_Guide_files/figure-html/nice-fig-1.png" alt="Here is a nice figure!" width="80%" />
+<p class="caption">
+Figure 2.1: Here is a nice figure!
+</p>
+</div>
+<p>Reference a figure by its code chunk label with the <code>fig:</code> prefix, e.g., see Figure <a href="intro.html#fig:nice-fig">2.1</a>. Similarly, you can reference tables generated from <code>knitr::kable()</code>, e.g., see Table <a href="intro.html#tab:nice-tab">2.1</a>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="intro.html#cb12-1"></a>knitr<span class="op">::</span><span class="kw">kable</span>(</span>
+<span id="cb12-2"><a href="intro.html#cb12-2"></a>  <span class="kw">head</span>(iris, <span class="dv">20</span>), <span class="dt">caption =</span> <span class="st">&#39;Here is a nice table!&#39;</span>,</span>
+<span id="cb12-3"><a href="intro.html#cb12-3"></a>  <span class="dt">booktabs =</span> <span class="ot">TRUE</span></span>
+<span id="cb12-4"><a href="intro.html#cb12-4"></a>)</span></code></pre></div>
+<table>
+<caption><span id="tab:nice-tab">Table 2.1: </span>Here is a nice table!</caption>
+<thead>
+<tr class="header">
+<th align="right">Sepal.Length</th>
+<th align="right">Sepal.Width</th>
+<th align="right">Petal.Length</th>
+<th align="right">Petal.Width</th>
+<th align="left">Species</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">5.1</td>
+<td align="right">3.5</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.9</td>
+<td align="right">3.0</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">4.7</td>
+<td align="right">3.2</td>
+<td align="right">1.3</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.6</td>
+<td align="right">3.1</td>
+<td align="right">1.5</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.0</td>
+<td align="right">3.6</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.4</td>
+<td align="right">3.9</td>
+<td align="right">1.7</td>
+<td align="right">0.4</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">4.6</td>
+<td align="right">3.4</td>
+<td align="right">1.4</td>
+<td align="right">0.3</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.0</td>
+<td align="right">3.4</td>
+<td align="right">1.5</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">4.4</td>
+<td align="right">2.9</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.9</td>
+<td align="right">3.1</td>
+<td align="right">1.5</td>
+<td align="right">0.1</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.4</td>
+<td align="right">3.7</td>
+<td align="right">1.5</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.8</td>
+<td align="right">3.4</td>
+<td align="right">1.6</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">4.8</td>
+<td align="right">3.0</td>
+<td align="right">1.4</td>
+<td align="right">0.1</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.3</td>
+<td align="right">3.0</td>
+<td align="right">1.1</td>
+<td align="right">0.1</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.8</td>
+<td align="right">4.0</td>
+<td align="right">1.2</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.7</td>
+<td align="right">4.4</td>
+<td align="right">1.5</td>
+<td align="right">0.4</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.4</td>
+<td align="right">3.9</td>
+<td align="right">1.3</td>
+<td align="right">0.4</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.1</td>
+<td align="right">3.5</td>
+<td align="right">1.4</td>
+<td align="right">0.3</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.7</td>
+<td align="right">3.8</td>
+<td align="right">1.7</td>
+<td align="right">0.3</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.1</td>
+<td align="right">3.8</td>
+<td align="right">1.5</td>
+<td align="right">0.3</td>
+<td align="left">setosa</td>
+</tr>
+</tbody>
+</table>
+<p>You can write citations, too. For example, we are using the <strong>bookdown</strong> package <span class="citation">(Xie <a href="#ref-R-bookdown" role="doc-biblioref">2021</a>)</span> in this sample book, which was built on top of R Markdown and <strong>knitr</strong> <span class="citation">(Xie <a href="#ref-xie2015" role="doc-biblioref">2015</a>)</span>.</p>
+<div id="rstudio-cheatsheets-master-list" class="section level2">
+<h2><span class="header-section-number">2.1</span> <a href="https://www.rstudio.com/resources/cheatsheets/">RStudio Cheatsheets (master list)</a></h2>
+<p>These seem handy.
+<br><br></p>
+<p>Some functions that can give you a sense of the data you’re working with.</p>
+<p>List of these functions:<br />
+- <code>summary</code>
+- <code>glimpse</code></p>
+<ul>
+<li><code>table</code></li>
+<li><code>dim</code><br />
+</li>
+<li><code>nrow</code><br />
+</li>
+<li><code>ncol</code><br />
+</li>
+<li><code>count</code><br />
+</li>
+<li><code>names</code>
+<br><br></li>
+</ul>
+</div>
+<div id="summary" class="section level2">
+<h2><span class="header-section-number">2.2</span> <code>summary</code></h2>
+<p>Provides a summary of each data series in a dataframe. Good for getting a sense of the range of the
+data as well as outliers and missing values.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="intro.html#cb13-1"></a><span class="kw">summary</span>(nyc_license)</span></code></pre></div>
+<pre><code>##  animal_name        animal_gender      animal_birth_month     breed_rc        
+##  Length:122203      Length:122203      Min.   :1999-01-01   Length:122203     
+##  Class :character   Class :character   1st Qu.:2007-10-01   Class :character  
+##  Mode  :character   Mode  :character   Median :2011-05-01   Mode  :character  
+##                                        Mean   :2010-09-05                     
+##                                        3rd Qu.:2014-05-01                     
+##                                        Max.   :2017-03-01                     
+##                                                                               
+##    borough             zip_code     community_district census_tract2010
+##  Length:122203      Min.   :  121   Min.   :101.0      Min.   :     1  
+##  Class :character   1st Qu.:10029   1st Qu.:108.0      1st Qu.:   126  
+##  Mode  :character   Median :10465   Median :302.0      Median :   251  
+##                     Mean   :10678   Mean   :265.2      Mean   :  7339  
+##                     3rd Qu.:11228   3rd Qu.:403.0      3rd Qu.:   912  
+##                     Max.   :94608   Max.   :595.0      Max.   :157903  
+##                                     NA&#39;s   :3341       NA&#39;s   :3341    
+##      nta            city_council_district congressional_district
+##  Length:122203      Min.   : 1.00         Min.   : 3.00         
+##  Class :character   1st Qu.: 6.00         1st Qu.: 8.00         
+##  Mode  :character   Median :22.00         Median :11.00         
+##                     Mean   :22.83         Mean   :10.27         
+##                     3rd Qu.:37.00         3rd Qu.:12.00         
+##                     Max.   :51.00         Max.   :16.00         
+##                     NA&#39;s   :3341          NA&#39;s   :3341          
+##  state_senatorial_district license_issued_date  license_expired_date
+##  Min.   :10.00             Min.   :2014-09-12   Min.   :2016-01-01  
+##  1st Qu.:18.00             1st Qu.:2015-08-24   1st Qu.:2016-10-13  
+##  Median :25.00             Median :2016-03-25   Median :2017-05-07  
+##  Mean   :23.54             Mean   :2016-02-13   Mean   :2017-05-24  
+##  3rd Qu.:28.00             3rd Qu.:2016-07-30   3rd Qu.:2017-09-27  
+##  Max.   :36.00             Max.   :2016-12-31   Max.   :2022-11-20  
+##  NA&#39;s   :3341              NA&#39;s   :1</code></pre>
+<p><code>summary</code> behaves differently depending on the objects it’s applied to:</p>
+<p>Above we ran summary on the dataframe <code>nyc_license</code>. Here we can create a model <code>mod</code>.
+We can run the <code>summary</code> function on each and get very different results.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="intro.html#cb15-1"></a>mod &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> d)</span>
+<span id="cb15-2"><a href="intro.html#cb15-2"></a></span>
+<span id="cb15-3"><a href="intro.html#cb15-3"></a><span class="kw">summary</span>(d)</span></code></pre></div>
+<pre><code>##        id               x                  y             color          
+##  Min.   :   1.0   Min.   :-3.48221   Min.   : 4.245   Length:1000       
+##  1st Qu.: 250.8   1st Qu.:-0.68572   1st Qu.: 8.536   Class :character  
+##  Median : 500.5   Median :-0.04232   Median : 9.932   Mode  :character  
+##  Mean   : 500.5   Mean   :-0.01082   Mean   : 9.937                     
+##  3rd Qu.: 750.2   3rd Qu.: 0.65950   3rd Qu.:11.226                     
+##  Max.   :1000.0   Max.   : 3.15512   Max.   :16.883</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="intro.html#cb17-1"></a><span class="kw">summary</span>(mod)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = d)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.6715 -1.4181  0.0019  1.3074  7.0052 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  9.93589    0.06412 154.956   &lt;2e-16 ***
+## x           -0.08927    0.06528  -1.367    0.172    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.028 on 998 degrees of freedom
+## Multiple R-squared:  0.00187,    Adjusted R-squared:  0.0008698 
+## F-statistic:  1.87 on 1 and 998 DF,  p-value: 0.1718</code></pre>
+<p><br><br></p>
+</div>
+<div id="print-glimpse-str" class="section level2">
+<h2><span class="header-section-number">2.3</span> <code>print</code>, <code>glimpse</code> &amp; <code>str</code></h2>
+<p>Alternative ways to see the contents of the data in more detail than <code>summary()</code> provides.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="intro.html#cb19-1"></a><span class="kw">print</span>(mpg)</span></code></pre></div>
+<pre><code>## # A tibble: 234 x 11
+##    manufacturer model    displ  year   cyl trans   drv     cty   hwy fl    class
+##    &lt;chr&gt;        &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+##  1 audi         a4         1.8  1999     4 auto(l… f        18    29 p     comp…
+##  2 audi         a4         1.8  1999     4 manual… f        21    29 p     comp…
+##  3 audi         a4         2    2008     4 manual… f        20    31 p     comp…
+##  4 audi         a4         2    2008     4 auto(a… f        21    30 p     comp…
+##  5 audi         a4         2.8  1999     6 auto(l… f        16    26 p     comp…
+##  6 audi         a4         2.8  1999     6 manual… f        18    26 p     comp…
+##  7 audi         a4         3.1  2008     6 auto(a… f        18    27 p     comp…
+##  8 audi         a4 quat…   1.8  1999     4 manual… 4        18    26 p     comp…
+##  9 audi         a4 quat…   1.8  1999     4 auto(l… 4        16    25 p     comp…
+## 10 audi         a4 quat…   2    2008     4 manual… 4        20    28 p     comp…
+## # … with 224 more rows</code></pre>
+<p>Note that the data type is also included.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="intro.html#cb21-1"></a><span class="kw">glimpse</span>(mpg)</span></code></pre></div>
+<pre><code>## Rows: 234
+## Columns: 11
+## $ manufacturer &lt;chr&gt; &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;…
+## $ model        &lt;chr&gt; &quot;a4&quot;, &quot;a4&quot;, &quot;a4&quot;, &quot;a4&quot;, &quot;a4&quot;, &quot;a4&quot;, &quot;a4&quot;, &quot;a4 quattro&quot;, &quot;…
+## $ displ        &lt;dbl&gt; 1.8, 1.8, 2.0, 2.0, 2.8, 2.8, 3.1, 1.8, 1.8, 2.0, 2.0, 2.…
+## $ year         &lt;int&gt; 1999, 1999, 2008, 2008, 1999, 1999, 2008, 1999, 1999, 200…
+## $ cyl          &lt;int&gt; 4, 4, 4, 4, 6, 6, 6, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6, 8, 8, …
+## $ trans        &lt;chr&gt; &quot;auto(l5)&quot;, &quot;manual(m5)&quot;, &quot;manual(m6)&quot;, &quot;auto(av)&quot;, &quot;auto…
+## $ drv          &lt;chr&gt; &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4…
+## $ cty          &lt;int&gt; 18, 21, 20, 21, 16, 18, 18, 18, 16, 20, 19, 15, 17, 17, 1…
+## $ hwy          &lt;int&gt; 29, 29, 31, 30, 26, 26, 27, 26, 25, 28, 27, 25, 25, 25, 2…
+## $ fl           &lt;chr&gt; &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p…
+## $ class        &lt;chr&gt; &quot;compact&quot;, &quot;compact&quot;, &quot;compact&quot;, &quot;compact&quot;, &quot;compact&quot;, &quot;c…</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="intro.html#cb23-1"></a><span class="kw">str</span>(mpg)</span></code></pre></div>
+<pre><code>## tibble[,11] [234 × 11] (S3: tbl_df/tbl/data.frame)
+##  $ manufacturer: chr [1:234] &quot;audi&quot; &quot;audi&quot; &quot;audi&quot; &quot;audi&quot; ...
+##  $ model       : chr [1:234] &quot;a4&quot; &quot;a4&quot; &quot;a4&quot; &quot;a4&quot; ...
+##  $ displ       : num [1:234] 1.8 1.8 2 2 2.8 2.8 3.1 1.8 1.8 2 ...
+##  $ year        : int [1:234] 1999 1999 2008 2008 1999 1999 2008 1999 1999 2008 ...
+##  $ cyl         : int [1:234] 4 4 4 4 6 6 6 4 4 4 ...
+##  $ trans       : chr [1:234] &quot;auto(l5)&quot; &quot;manual(m5)&quot; &quot;manual(m6)&quot; &quot;auto(av)&quot; ...
+##  $ drv         : chr [1:234] &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ cty         : int [1:234] 18 21 20 21 16 18 18 18 16 20 ...
+##  $ hwy         : int [1:234] 29 29 31 30 26 26 27 26 25 28 ...
+##  $ fl          : chr [1:234] &quot;p&quot; &quot;p&quot; &quot;p&quot; &quot;p&quot; ...
+##  $ class       : chr [1:234] &quot;compact&quot; &quot;compact&quot; &quot;compact&quot; &quot;compact&quot; ...</code></pre>
+<p>(I think <code>str()</code> might have some powers beyond the above to unpack R objects.)
+<br><br></p>
+</div>
+<div id="dim-row-and-col" class="section level2">
+<h2><span class="header-section-number">2.4</span> <code>dim</code>, <code>row</code> and <code>col</code></h2>
+<p>Shape, rows and columns of dataframe:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="intro.html#cb25-1"></a><span class="kw">dim</span>(nyc_license)</span></code></pre></div>
+<pre><code>## [1] 122203     14</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="intro.html#cb27-1"></a><span class="kw">nrow</span>(nyc_license)</span></code></pre></div>
+<pre><code>## [1] 122203</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="intro.html#cb29-1"></a><span class="kw">ncol</span>(nyc_license)</span></code></pre></div>
+<pre><code>## [1] 14</code></pre>
+<p><br><br></p>
+</div>
+<div id="count" class="section level2">
+<h2><span class="header-section-number">2.5</span> <code>count()</code></h2>
+<p>Useful count of unique combinations.
+Easiest to understand with an example:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="intro.html#cb31-1"></a><span class="kw">count</span>(mpg,manufacturer, class)</span></code></pre></div>
+<pre><code>## # A tibble: 32 x 3
+##    manufacturer class          n
+##    &lt;chr&gt;        &lt;chr&gt;      &lt;int&gt;
+##  1 audi         compact       15
+##  2 audi         midsize        3
+##  3 chevrolet    2seater        5
+##  4 chevrolet    midsize        5
+##  5 chevrolet    suv            9
+##  6 dodge        minivan       11
+##  7 dodge        pickup        19
+##  8 dodge        suv            7
+##  9 ford         pickup         7
+## 10 ford         subcompact     9
+## # … with 22 more rows</code></pre>
+<p>chevrolet has 5 different 2 seaters across the dataset. Using <code>filter</code>, you can
+see these are 5 different corvettes:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="intro.html#cb33-1"></a><span class="kw">filter</span>(mpg,manufacturer<span class="op">==</span><span class="st">&quot;chevrolet&quot;</span>, class<span class="op">==</span><span class="st">&quot;2seater&quot;</span> )</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 11
+##   manufacturer model   displ  year   cyl trans    drv     cty   hwy fl    class 
+##   &lt;chr&gt;        &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; 
+## 1 chevrolet    corvet…   5.7  1999     8 manual(… r        16    26 p     2seat…
+## 2 chevrolet    corvet…   5.7  1999     8 auto(l4) r        15    23 p     2seat…
+## 3 chevrolet    corvet…   6.2  2008     8 manual(… r        16    26 p     2seat…
+## 4 chevrolet    corvet…   6.2  2008     8 auto(s6) r        15    25 p     2seat…
+## 5 chevrolet    corvet…   7    2008     8 manual(… r        15    24 p     2seat…</code></pre>
+<p><br><br></p>
+</div>
+<div id="table" class="section level2">
+<h2><span class="header-section-number">2.6</span> <code>table()</code></h2>
+<p><code>table()</code> is similar to <code>count()</code>, but provides you with the counts for all possible
+combinations, even if the value is 0.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="intro.html#cb35-1"></a><span class="kw">table</span>(mpg<span class="op">$</span>manufacturer, mpg<span class="op">$</span>class)</span></code></pre></div>
+<pre><code>##             
+##              2seater compact midsize minivan pickup subcompact suv
+##   audi             0      15       3       0      0          0   0
+##   chevrolet        5       0       5       0      0          0   9
+##   dodge            0       0       0      11     19          0   7
+##   ford             0       0       0       0      7          9   9
+##   honda            0       0       0       0      0          9   0
+##   hyundai          0       0       7       0      0          7   0
+##   jeep             0       0       0       0      0          0   8
+##   land rover       0       0       0       0      0          0   4
+##   lincoln          0       0       0       0      0          0   3
+##   mercury          0       0       0       0      0          0   4
+##   nissan           0       2       7       0      0          0   4
+##   pontiac          0       0       5       0      0          0   0
+##   subaru           0       4       0       0      0          4   6
+##   toyota           0      12       7       0      7          0   8
+##   volkswagen       0      14       7       0      0          6   0</code></pre>
+</div>
+<div id="head-and-tail-functions-in-r" class="section level2">
+<h2><span class="header-section-number">2.7</span> <code>head()</code> and <code>tail()</code> Functions in R</h2>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="intro.html#cb37-1"></a><span class="kw">head</span>(d, <span class="dv">5</span>) <span class="co"># where d is dataframe</span></span></code></pre></div>
+<pre><code>##   id          x         y color
+## 1  1  0.8907807  9.863163   red
+## 2  2 -0.9978216  6.900026   red
+## 3  3  0.3186174  9.326734   red
+## 4  4 -0.4644039  8.112911   red
+## 5  5 -0.6419156 10.761420   red</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="intro.html#cb39-1"></a><span class="kw">tail</span>(d, <span class="dv">5</span>)</span></code></pre></div>
+<p>Not that by including ’results=“hide” in the code chunk, the code is displayed but the results are not.
+<br><br></p>
+</div>
+<div id="names" class="section level2">
+<h2><span class="header-section-number">2.8</span> <code>names()</code></h2>
+<p><code>names</code> isn’t a particularly useful overview function, but it can be useful to
+pull column headings in a vector, which can then be referenced like any other vector.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="intro.html#cb40-1"></a><span class="kw">names</span>(nyc_license)</span></code></pre></div>
+<pre><code>##  [1] &quot;animal_name&quot;               &quot;animal_gender&quot;            
+##  [3] &quot;animal_birth_month&quot;        &quot;breed_rc&quot;                 
+##  [5] &quot;borough&quot;                   &quot;zip_code&quot;                 
+##  [7] &quot;community_district&quot;        &quot;census_tract2010&quot;         
+##  [9] &quot;nta&quot;                       &quot;city_council_district&quot;    
+## [11] &quot;congressional_district&quot;    &quot;state_senatorial_district&quot;
+## [13] &quot;license_issued_date&quot;       &quot;license_expired_date&quot;</code></pre>
+<p><br><br></p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="intro.html#cb42-1"></a><span class="kw">names</span>(nyc_license)[<span class="dv">3</span>]</span></code></pre></div>
+<pre><code>## [1] &quot;animal_birth_month&quot;</code></pre>
+<p><br><br></p>
+
+</div>
+</div>
+<h3> Dates</h3>
+<div id="refs" class="references">
+<div id="ref-xie2015">
+<p>Xie, Yihui. 2015. <em>Dynamic Documents with R and Knitr</em>. 2nd ed. Boca Raton, Florida: Chapman; Hall/CRC. <a href="http://yihui.org/knitr/">http://yihui.org/knitr/</a>.</p>
+</div>
+<div id="ref-R-bookdown">
+<p>Xie, Yihui. 2021. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="vectors.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Joes_R_Guide.pdf", "Joes_R_Guide.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

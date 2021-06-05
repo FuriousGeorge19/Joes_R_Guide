@@ -1,0 +1,545 @@
+# Vectors
+
+
+Primary Source: 
+
+[R for Data Science: Vectors](https://r4ds.had.co.nz/vectors.html)
+
+
+## Vector basics
+
+In some ways, working with vectors is harder than working with dataframes and data tables. 
+That's slightly counterintuitive, as they're the most atomic unit one works with in R. In Manning's 
+*Practical Data Science with R` they state: 
+
+> *"R’s most basic data type is the vector, or array....R is fairly unique in having no scalar types. A single number such as the number 5 is represented in R as a vector with exactly one entry (5).*
+
+There are two types of vectors:
+
+1.  **Atomic** vectors, of which there are six types: **logical**, **integer**, **double**, **character**, **complex**, and **raw**.
+    Integer and double vectors are collectively known as **numeric** vectors.
+
+2.  **Lists**, which are sometimes called recursive vectors because lists can contain other lists.
+
+The chief difference between atomic vectors and lists is that atomic vectors are homogeneous, while lists can be heterogeneous. There’s one other related object: NULL. NULL is often used to represent the absence of a vector (as opposed to NA which is used to represent the absence of a value in a vector). NULL typically behaves like a vector of length 0. Figure 20.1 summarises the interrelationships.
+
+
+![20.1](./images/vector_hierarchy.png)
+
+
+Every vector has two key properties:
+
+1.  Its **type**, which you can determine with `typeof()`.
+
+    ```{r}
+    typeof(letters)
+    typeof(1:10)
+    ```
+
+2.  Its **length**, which you can determine with `length()`.
+
+    ```{r}
+    x <- list("a", "b", 1:10)
+    length(x)
+    ```
+
+This chapter will introduce you to these important vectors from simplest to most complicated. You’ll start with atomic vectors, then build up to lists, and finish off with augmented vectors.
+
+## Important types of atomic vector
+
+The four most important types of atomic vector are logical, integer, double, and character.
+
+## Logical
+
+Logical vectors are the simplest type of atomic vector because they can take only three possible values: `FALSE`, `TRUE`, and `NA`.    
+Logical vectors are usually constructed with comparison operators, you can also create them by hand with `c()`:
+
+```{r}
+1:10 %% 3 == 0
+c(TRUE, TRUE, FALSE, NA)
+```
+
+## Numeric
+
+Integer and double vectors are known collectively as numeric vectors. In R, numbers are doubles by default.
+To make an integer, place an `L` after the number:
+
+```{r}
+typeof(1)
+typeof(1L)
+1.5L
+```
+
+The distinction between integers and doubles is not usually important, but there are two important differences that you should be aware of:
+
+1.  Doubles are approximations.
+
+    For example, what is square of the square root of two?
+
+    ```{r}
+    x <- sqrt(2) ^ 2
+    x
+    x - 2
+    ```
+
+This behaviour is common when working with floating point numbers: most calculations include some approximation error.
+
+Instead of comparing floating point numbers using `==`, you should use `dplyr::near()` which allows for some numerical tolerance.
+
+2.  Integers have one special value: `NA`, while doubles have four: `NA`, `NaN`, `Inf` and `-Inf`.
+    All three special values `NaN`, `Inf` and `-Inf` can arise during division:
+
+    ```{r}
+    c(-1, 0, 1) / 0
+    ```
+
+    Avoid using `==` to check for these other special values.
+    Instead use the helper functions `is.finite()`, `is.infinite()`, and `is.nan()`:
+
+    |                 | 0   | Inf | NA  | NaN |
+    |-----------------|-----|-----|-----|-----|
+    | `is.finite()`   | x   |     |     |     |
+    | `is.infinite()` |     | x   |     |     |
+    | `is.na()`       |     |     | x   | x   |
+    | `is.nan()`      |     |     |     | x   |
+
+## Character
+
+Character vectors are the most complex type of atomic vector, because each element of a character vector is a string, and a string can contain an arbitrary amount of data.
+
+`parse_number` function. (One of several parse functions.) Could be quite handy.
+
+```{r}
+parse_number(c("1.0", "3.5", "$1,000.00", "NA", "ABCD12234.90", "1234ABC", "A123B", "A1B2C"))
+```
+
+You've already seen the most important type of implicit coercion: using a logical vector in a numeric context. In this case `TRUE` is converted to `1` and `FALSE` converted to `0`.
+That means the sum of a logical vector is the number of `TRUE`s, and the mean of a logical vector is the proportion of `TRUE`s:
+
+(Also one of the first times I've seen `sample()` in this document.)
+
+```{r}
+x <- sample(20, 100, replace = TRUE) # sample integers from 1-20, 100 times w/replacement
+y <- x > 10 # create a logical vector (I think it's a vector)
+sum(y)  # how many are greater than 10?
+mean(y) # what proportion are greater than 10?
+```
+
+## Scalars and recycling rules
+
+As well as implicitly coercing the types of vectors to be compatible, R will also implicitly coerce the length of vectors.
+This is called vector **recycling**, because the shorter vector is repeated, or recycled, to the same length as the longer vector.
+
+This is generally most useful when you are mixing vectors and "scalars".
+
+Because there are no scalars, most built-in functions are **vectorised**, meaning that they will operate on a vector of numbers.
+That's why, for example, this code works:
+
+```{r}
+sample(10) + 100
+runif(10) > 0.5
+5*sample(5,10,replace=TRUE)
+```
+
+`runif` is not a conditional `if` statement. It is a `r`andom draw from the [0,1] (`u`niform) interval.
+
+## Naming vectors
+
+All types of vectors can be named.
+You can name them during creation with `c()`:
+
+```{r}
+c(x = 1, y = 2, z = 4)
+```
+
+Or after the fact with `purrr::set_names()`:
+
+```{r}
+set_names(1:3, c("a", "b", "c"))
+```
+
+Named vectors are most useful for subsetting, described next.
+
+## Subsetting {#vector-subsetting}
+
+So far we've used `dplyr::filter()` to filter the rows in a tibble.
+`filter()` only works with tibble, so we'll need a new tool for vectors: `[`.
+`[` is the subsetting function, and is called like `x[a]`.    
+
+There are four types of things that you can subset a vector with:
+
+1.  A numeric vector containing only integers.
+    The integers must either be all positive, all negative, or zero.
+
+    Subsetting with positive integers keeps the elements at those positions:
+
+    ```{r}
+    x <- c("one", "two", "three", "four", "five")
+    x[c(3, 2, 5)]
+    ```
+
+    By repeating a position, you can actually make a longer output than input:
+
+    ```{r}
+    x[c(1, 1, 5, 5, 5, 2)]
+    ```
+
+    Negative values drop the elements at the specified positions:
+
+    ```{r}
+    x[c(-1, -3, -5)]
+    ```
+
+    It's an error to mix positive and negative values:
+
+    ```{r, error = TRUE}
+    x[c(1, -1)]
+    ```
+
+2.  Subsetting with a logical vector keeps all values corresponding to a `TRUE` value.
+    This is most often useful in conjunction with the comparison functions.
+
+    ```{r}
+    x <- c(10, 3, NA, 5, 8, 1, NA)
+    # All non-missing values of x
+    x[!is.na(x)]
+    # All even (or missing!) values of x
+    x[x %% 2 == 0]
+    # All even AND not missing values of x
+    x[x %% 2 == 0 & !is.na(x)]
+    ```
+
+3.  If you have a named vector, you can subset it with a character vector:
+
+    ```{r}
+    x <- c(abc = 1, def = 2, xyz = 5)
+    x[c("xyz", "def")]
+    ```
+
+
+4.  The simplest type of subsetting is nothing, `x[]`, which returns the complete `x`.
+    This is not useful for subsetting vectors, but it is useful when subsetting matrices (and other high dimensional structures) because it lets you select all the rows or all the columns, by leaving that index blank.
+    For example, if `x` is 2d, `x[1, ]` selects the first row and all the columns, and `x[, -1]` selects all rows and all columns except the first. *(NOTE TO SELF: This last one is quite different from python, and a little unintuitive.)*
+
+To learn more about the applications of subsetting, reading the "Subsetting" chapter of *Advanced R*: <http://adv-r.had.co.nz/Subsetting.html#applications>.
+
+There is an important variation of `[` called `[[`.
+`[[` only ever extracts a single element, and always drops names.
+It's a good idea to use it whenever you want to make it clear that you're extracting a single item, as in a for loop.
+The distinction between `[` and `[[` is most important for lists, as we'll see shortly.
+
+## Exercises
+
+The expression `sum(!is.finite(x))` calculates the number of elements in the vector that are equal to missing (NA), not-a-number (NaN), or infinity (Inf).
+
+I hadn't realized that NA = 'missing' and NaN = 'not-a-number' until now. 
+
+### Exercise 1
+
+Two uses for this exercise. One, it's one of my first exposures to `function()` and
+the first two answers contrast `[]` from `[[]]`, which seem important and easy to 
+confuse. 
+
+*Create functions that take a vector as input and returns the last value. Should you use [ or [[?*
+
+```{r}
+last_value <- function(x) {
+  # check for case with no length
+  if (length(x)) {
+    x[[length(x)]]
+  } else {
+    x
+  }
+}
+last_value(numeric())
+
+last_value(1)
+
+last_value(1:10)
+
+```
+
+### Exercise 2
+
+*Return the elements at even numbered positions.*
+
+```{r}
+even_indices <- function(x) {
+  if (length(x)) {
+    x[seq_along(x) %% 2 == 0]
+  } else {
+    x
+  }
+}
+even_indices(numeric())
+
+even_indices(1)
+
+even_indices(1:10)
+
+even_indices(letters)
+
+```
+
+Great [example](https://stackoverflow.com/questions/13732062/what-are-examples-of-when-seq-along-works-but-seq-produces-unintended-results) on stackoverflow of`seq`vs.`seq_along`. It appears there's every reason to
+use`seq_along`instead as its behavior makes more sense. 
+
+### Exercise 3: `seq()`
+
+*Creating a sequence in a vector:*
+
+```{r}
+x <- seq(from = 10, to = 40, by = 10)
+y <- seq(from = 1, to = 4, by = 1)^2
+x
+y
+```
+
+### Exercise 4: `rep()`
+
+*Repeating data in a vector:*
+```{r}
+one_to_ten_1 <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+one_to_ten_2 <- 1:10
+ten_to_one <- 10:1
+
+one_to_ten_1
+one_to_ten_2
+ten_to_one
+```
+
+*Using `rep`licate*
+
+Two arguments: `times` or `each`:
+
+```{r}
+letter_vector <- c('a', 'b', 'c')
+
+rep(letter_vector, times = 3)
+rep(letter_vector, each = 3)
+
+rep(1:4, times = 1:4)
+
+```
+
+### Exercise 5: Sampling vectors
+
+*Draws from a normal distribution:*
+
+n = 8 draws from a normal distribution with mean 100 and sd = 20
+```{r}
+rnorm(n = 8, mean = 100, sd = 20)
+```
+
+*Draws from the uniform distribution*   
+```{r}
+draws <- runif(n = 1000, min = -1, max = 9)
+hist(draws, col = 'black')
+```
+
+*Draw from a vector using the `sample()` function with or without replacement*
+
+```{r}
+urn <- c('red_ball', 'blue_ball', 'green_ball')
+sample(x = urn, size = 4, replace = T)
+```
+
+*To shuffle (makes use of default arguments):*
+```{r}
+sample(urn)
+```
+
+### Exercise 6: Make a `matrix()`
+
+*Make a matrix:*
+```{r}
+m <- matrix(data = 1:10, ncol = 2)
+m
+m[c(1,2), c(2,1)]
+```
+
+
+
+
+
+## Recursive vectors (lists) {#lists}
+
+
+Lists are a step up in complexity from atomic vectors, because lists can contain other lists.
+This makes them suitable for representing hierarchical or tree-like structures.
+You create a list with `list()`:
+
+```{r}
+x <- list(1, 2, 3)
+x
+```
+
+A very useful tool for working with lists is `str()` because it focuses on the **str**ucture, not the contents.
+
+```{r}
+y <- list("a", 1L, 1.5, TRUE)
+str(y)
+```
+
+Lists can even contain other lists!
+
+```{r}
+z <- list(list(1, 2), list(3, 4))
+str(z)
+```
+
+To explain more complicated list manipulation functions, it's helpful to have a visual representation of lists.
+For example, take these three lists:
+
+```{r}
+x1 <- list(c(1, 2), c(3, 4))
+x2 <- list(list(1, 2), list(3, 4))
+x3 <- list(1, list(2, list(3)))
+```
+
+I'll draw them as follows:
+
+
+```{r, echo = FALSE, out.width = "50%"}
+knitr::include_graphics("./images/lists-structure.png")
+#![20.1](/home/jovyan/RBridge/vector_hierarchy.png)
+
+```
+
+
+
+**There are three principles:**
+
+1.  Lists have rounded corners. Atomic vectors have square corners.
+
+2.  Children are drawn inside their parent, and have a slightly darker background to make it easier to see the hierarchy.
+
+3.  The orientation of the children (i.e. rows or columns) isn't important, so I'll pick a row or column orientation to either save space or illustrate an important property in the example.
+
+### Subsetting
+
+There are three ways to subset a list, which I'll illustrate with a list named `a`:
+
+```{r}
+a <- list(a = 1:3, b = "a string", c = pi, d = list(-1, -5))
+```
+
+**`[ ]` extracts a sub-list. The result will always be a list.**
+
+```{r}
+    str(a[1:2])
+    str(a[4])
+```
+
+As with vectors, you can subset with a logical, integer, or character vector. **`[[ ]]`extracts a single component from a list. It removes a level of hierarchy from the list.**
+
+```{r}
+    str(a[[1]])
+    str(a[[4]])
+```
+
+**`$`is a shorthand for extracting named elements of a list.** It works similarly to`[[ ]]`except that you don't need to use quotes.
+
+```{r}
+  a$a
+  a[["a"]]
+```
+
+### More vector stuff
+
+```{r}
+v <- c(1,2,3,4,6)
+```
+
+If a vector is one-dimensional, then we can either:
+
+- Reference a location in that vector:
+  - `v[2]` Will print the value in the second position
+  - `v[5]` Will print the value in the fifth position
+  - `v[c(2,5)]`  Will print the value in the second and fifth positions
+  - `v[-1]`  Will print everything but the first *note the difference between this and python* 
+- Pass a logical test that will print values
+  - `v == 2` Tests for each value in that vector taking a particular tested, in this case, 2. 
+
+And so, 
+
+- `v[v == 2]` Will print only the values that meet the test.
+- `v[v == 6]` Will not print anything
+- `v[v %in% 1:3]` uses the set-based `%in%` operator which looks for existence in a range.  
+
+
+```{r}
+# returns by position
+v[2]
+v[5]
+v[c(2,5)]
+# everything but the first position
+v[-1]
+v == 2
+v[v == 2]
+
+v %in% 1:3
+v[ v %in% 1:3 ]
+
+```
+
+
+The distinction between `[ ]` and `[[ ]]` is really important for lists, because `[[ ]]` drills down into the list while `[ ]` returns a new, smaller list.
+
+
+### Lists of condiments
+
+The difference between `[` and `[[` is very important, but it's easy to get confused.
+To help you remember, let me show you an unusual pepper shaker.
+
+```{r, echo = FALSE, out.width = "25%"}
+knitr::include_graphics("images/pepper.jpg")
+```
+
+If this pepper shaker is your list `x`, then, `x[1]` is a pepper shaker containing a single pepper packet:
+
+```{r, echo = FALSE, out.width = "25%"}
+knitr::include_graphics("images/pepper-1.jpg")
+```
+
+`x[2]` would look the same, but would contain the second packet.
+`x[1:2]` would be a pepper shaker containing two pepper packets.
+
+`x[[1]]` is:
+
+```{r, echo = FALSE, out.width = "25%"}
+knitr::include_graphics("images/pepper-2.jpg")
+```
+
+If you wanted to get the content of the pepper package, you'd need `x[[1]][[1]]`:
+
+```{r, echo = FALSE, out.width = "25%"}
+knitr::include_graphics("images/pepper-3.jpg")
+```
+
+
+
+## Augmented vectors
+
+Atomic vectors and lists are the building blocks for other important vector types like factors and dates.
+I call these **augmented vectors**, because they are vectors with additional **attributes**, including class.
+Because augmented vectors have a class, they behave differently to the atomic vector on which they are built.
+In this book, we make use of four important augmented vectors:
+
+-   Factors
+-   Dates
+-   Date-times
+-   Tibbles
+
+These are described below.
+
+### Dates and date-times
+
+Dates in R are numeric vectors that represent the number of days since 1 January 1970.
+
+```{r}
+x <- as.Date("1971-01-01")
+unclass(x)
+typeof(x)
+attributes(x)
+```

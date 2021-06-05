@@ -1,0 +1,2 @@
+"0","ggplot(data = diamonds, mapping = aes(x = price, y = ..density..)) + "
+"0","  geom_freqpoly(mapping = aes(colour = cut), binwidth = 500)"

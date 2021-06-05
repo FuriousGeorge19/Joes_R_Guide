@@ -1,0 +1,6 @@
+"0","d <- data.frame(     "
+"0","  id = 1:1000,     "
+"0","  x = rnorm(1000, mean = 0, sd = 1),    "
+"0","  y = rnorm(1000, mean = 10, sd = 2),     "
+"0","  color = sample(c('red', 'blue'), size = 1000, replace = TRUE)    "
+"0",") "

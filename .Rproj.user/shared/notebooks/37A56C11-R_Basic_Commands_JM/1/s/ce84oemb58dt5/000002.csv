@@ -1,0 +1,5 @@
+"0","diamonds2 <- diamonds %>% "
+"0","  mutate(carat_bin=cut_width(carat, width=0.5, boundary=0) ) "
+"0",""
+"0","ggplot(data = diamonds2, mapping = aes(x = carat_bin, y = price)) +"
+"0","  geom_boxplot()"

@@ -1,0 +1,1 @@
+"0","head(count(mpg,manufacturer, class),8)"

@@ -1,0 +1,7 @@
+"0","agencies %>% "
+"0","  summarise("
+"0","    avg_launches = mean(count),"
+"0","    med_launches = median(count),"
+"0","    var_launches = var(count),"
+"0","    unq_agencies = n_distinct(agencies)"
+"0","  )"

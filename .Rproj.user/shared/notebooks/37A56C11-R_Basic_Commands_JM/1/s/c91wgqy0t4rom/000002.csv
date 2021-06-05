@@ -1,0 +1,8 @@
+"0","nycflight_temp <- nycflights13::flights %>% "
+"0","  mutate("
+"0","    cancelled = is.na(dep_time),"
+"0","    sched_hour = sched_dep_time %/% 100,"
+"0","    sched_min = sched_dep_time %% 100,"
+"0","    sched_dep_time = sched_hour + sched_min / 60"
+"0","  ) "
+"0","head(nycflight_temp,5)"

@@ -1,0 +1,3 @@
+"0","squirrel_subset_by_color <- squirrel_subset %>%  "
+"0","  group_by(primary_fur_color) %>%  "
+"0","  summarise(count_by_color = n())"

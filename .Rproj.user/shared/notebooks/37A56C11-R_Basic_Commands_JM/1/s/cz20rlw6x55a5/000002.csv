@@ -1,0 +1,5 @@
+"0","agencies %>% "
+"0","  mutate(log_count = log(count)) %>% "
+"0","  select(agency | contains(""count"")) %>% "
+"0","  arrange(desc(count)) %>% "
+"0","  head()"
